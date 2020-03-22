@@ -11,7 +11,7 @@
     "dev:start": "npm-run-all build start",
     "start": "node dist/server.js",
     "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
-    "test": "jest"
+    "test": "jest --forceExit --coverage --verbose"
   },
   "author": "YC & CH",
   "license": "ISC",

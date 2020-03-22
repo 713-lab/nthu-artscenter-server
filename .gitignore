@@ -5,3 +5,4 @@ public/static/uploads/*
 dist/
 .env.prod
 .env.stage
+coverage/
