@@ -4,6 +4,11 @@ node_js:
   - "8"
   - "9"
   - "10"
+env:
+  - SERVER_PORT=8080
+  - DB_NAME=artscenter
+  - DB_USERNAME=postgres
+  - DB_PASSWORD=
 services:
   - postgresql
 cache:
