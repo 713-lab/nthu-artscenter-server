@@ -3,7 +3,7 @@ import request from "supertest";
 // tslint:disable-next-line:no-console
 console.log(process.env.SERVER_PORT);
 // tslint:disable-next-line:no-console
-console.log(process.env.DB_NAME);
+console.log(process.env.DB_PASSWORD);
 
 import app from "../src/app";
 
