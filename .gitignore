@@ -3,4 +3,5 @@ node_modules
 package-lock.json
 public/static/uploads/*
 dist/
-*.env
+.env.prod
+.env.stage

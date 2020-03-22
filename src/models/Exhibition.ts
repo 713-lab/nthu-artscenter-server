@@ -1,5 +1,5 @@
 import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
-import { db } from '../models'
+import { db } from '../config/database'
 import { Media } from '../models/Media'
 import { Json } from "sequelize/types/lib/utils";
 
@@ -28,7 +28,7 @@ export class Exhibition extends Model {
 
   public coverId!: number;
   public cover!: any;
-  
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }

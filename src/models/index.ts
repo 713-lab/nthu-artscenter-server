@@ -1,15 +1,16 @@
-import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
+import { Exhibition } from './Exhibition'
+import { Media } from './Media'
+
+export const startDataBase = async () => {
+  try {
+    await Exhibition.sync({alter: true});
+    await Media.sync({alter: true});
+  } catch(err) {
+    // tslint:disable-next-line:no-console
+    console.log(err);
+  }
+}
 
 
-dotenv.config();
-
-export const db = new Sequelize({
-  database: process.env.DB_NAME || "artscenter",
-  username: process.env.DB_USERNAME || "admin",
-  password: process.env.DB_PASSWORD || "admin12345",
-  dialect: "postgres",
-  logging: false,
-});
 
 

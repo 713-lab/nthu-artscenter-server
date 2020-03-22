@@ -1,5 +1,5 @@
 import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
-import { db } from '../models'
+import { db } from '../config/database'
 
 export class Media extends Model {
   public id!: number;

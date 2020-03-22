@@ -6,10 +6,12 @@ express.js
 
 ## Enviroment Variables
 
+```
 SERVER_PORT=8182
 DB_NAME=hello
 DB_USERNAME=hello
 DB_PASSWORD=hello
+```
 
 ## Postgresql
 
@@ -17,7 +19,7 @@ Remember to run postgresql
 
 ## Files
 
-folder          | usage             |
+Folder          | Usage             |
 --------------- | ----------------- |
 src/            | Source code       |
 src/controllers | Query             |
