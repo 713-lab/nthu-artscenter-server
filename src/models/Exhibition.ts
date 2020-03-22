@@ -5,6 +5,7 @@ import { Json } from "sequelize/types/lib/utils";
 
 export class Exhibition extends Model {
   public id!: number;
+  public type!: string;
   public title!: string;
   public subtitle!: string;
   public description!: string;
@@ -35,6 +36,7 @@ export class Exhibition extends Model {
 
 export interface ExhibitionInterface {
   id: number;
+  type: string;
   title: string;
   subtitle: string;
   description: string;
@@ -103,8 +105,7 @@ Exhibition.init({
 
 Exhibition.hasMany(Media, {
   sourceKey: "id",
-  foreignKey: "exhibitionId",
-  as: "previousLinks"
+  foreignKey: "exhibitionId"
 });
 
 Exhibition.belongsTo(Media, {
