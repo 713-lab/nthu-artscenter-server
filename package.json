@@ -9,7 +9,7 @@
     "tsc": "tsc",
     "build": "npm-run-all clean lint tsc",
     "dev:start": "npm-run-all build start",
-    "start": "node .",
+    "start": "node dist/server.js",
     "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
     "test": "jest"
   },
