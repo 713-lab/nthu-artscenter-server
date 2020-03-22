@@ -10,7 +10,3 @@ export const startDataBase = async () => {
     console.log(err);
   }
 }
-
-
-
-
