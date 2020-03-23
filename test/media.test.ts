@@ -7,9 +7,10 @@ console.log(process.env.DB_PASSWORD);
 
 import app from "../src/app";
 
+
 describe("GET /api", () => {
-  test("should return 200 OK", () => {
-    return request(app).get("/api/v2/medias")
-          .expect(200);
+  it("should return 200 OK", (done) => {
+    request(app).get("/api/v2/medias")
+          .expect(200, done);
   })
 })
