@@ -11,14 +11,12 @@ addons:
     - postgresql-10
     - postgresql-client-10
 env:
-  global:
-    - PGPORT=5433
-  - SERVER_PORT=8080 DB_NAME=artscenter DB_USERNAME=postgres DB_PASSWORD=''
+  - PGPORT=5433 SERVER_PORT=8080 DB_NAME=artscenter DB_USERNAME=postgres DB_PASSWORD=''
 cache:
   directories:
     - node_modules
-before_script:
-  - sudo psql -c 'create database artscenter;' -U postgres
+before_install:
+  - sudo psql -u postgres psql -c "create database artscenter"
 script:
   - npm run build
   - npm run test
