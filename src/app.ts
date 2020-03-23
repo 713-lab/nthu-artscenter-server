@@ -16,9 +16,12 @@ db.sync()
   await startDataBase();
 })
 
-app.set("port", process.env.SERVER_PORT || 3000);
+app.set("port", process.env.SERVER_PORT || 8080);
 
 app.use(bodyParser.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(morgan('combined'));
 
 app.use('/api/v2', routeV2);
