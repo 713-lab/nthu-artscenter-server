@@ -5,7 +5,7 @@ console.log(process.env.SERVER_PORT);
 // tslint:disable-next-line:no-console
 console.log(process.env.DB_PASSWORD);
 
-import app from "../src/app";
+import app from "../dist/app";
 
 
 describe("GET /api", () => {
