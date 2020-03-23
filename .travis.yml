@@ -15,8 +15,8 @@ env:
 cache:
   directories:
     - node_modules
-before_install:
-  - sudo psql -u postgres psql -c "create database artscenter"
+before_script:
+  - sudo psql -c 'create database artscenter;' -U postgres
 script:
   - npm run build
   - npm run test
