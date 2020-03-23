@@ -8,10 +8,13 @@ import { storeTwoSizePic, moveTmpFilesToRightFolder, generateIndexFolder } from 
 
 export class MediasController {
 
-  public index(_req: Request, res: Response) {
-    Media.findAll < Media > ({})
-      .then((Medias: Media[]) => res.send(Medias))
-      .catch((err: Error) => res.status(500).json(err))
+  public async index(_req: Request, res: Response) {
+    try {
+      const medias: Media[] = await Media.findAll < Media > ({});
+      res.send(medias);
+    } catch(err) {
+      res.status(500).send({message: err})
+    }
   }
 
   public create(req: Request, res: Response) {
