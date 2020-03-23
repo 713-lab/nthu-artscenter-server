@@ -1,5 +1,6 @@
 import express from 'express';
 import { ExhibitionsController } from "../controllers/exhibitions.controller";
+import { PublicationsController } from "../controllers/publications.controller";
 import { MediasController } from "../controllers/medias.controller";
 import { upload } from "../utils/multer";
 import { } from "../utils/sharp";
@@ -7,6 +8,7 @@ import { } from "../utils/sharp";
 const app = express();
 
 const exhibitionsController = new ExhibitionsController();
+const publicationsController = new PublicationsController();
 const mediasController = new MediasController();
 
 app
@@ -31,5 +33,18 @@ app
   .get(mediasController.show)
   .put(mediasController.update)
   .delete(mediasController.delete);
+
+// Publication
+app
+  .route("/publications")
+  .get(publicationsController.index)
+  .post(publicationsController.create);
+
+app
+  .route("/publications/:id")
+  .get(publicationsController.show)
+  .put(publicationsController.update)
+  .delete(publicationsController.delete);
+
 
 export default app;
