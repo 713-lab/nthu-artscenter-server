@@ -1,4 +1,4 @@
-sudo: true
+sudo: false
 language: node_js
 node_js:
   - 12
@@ -16,7 +16,7 @@ cache:
   directories:
     - node_modules
 before_script:
-  - sudo psql -c 'create database artscenter;' -U postgres
+  - psql -c 'create database artscenter;' -U postgres
 script:
   - npm run build
   - npm run test
