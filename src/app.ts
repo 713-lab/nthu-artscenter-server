@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 
-db.sync()
+db.sync({alter: true})
 .then(async() => {
   try {
     await startDataBase();

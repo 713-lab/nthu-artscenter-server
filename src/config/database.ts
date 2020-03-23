@@ -5,8 +5,8 @@ dotenv.config();
 
 export const db = new Sequelize({
   database: process.env.DB_NAME || "artscenter",
-  username: process.env.DB_USERNAME || "postgres",
-  password: process.env.DB_PASSWORD || "",
+  username: process.env.DB_USERNAME || "testuser",
+  password: process.env.DB_PASSWORD || "testuser",
   dialect: "postgres",
   logging: false,
 });
