@@ -1,31 +1,81 @@
 # NTHU ArtsCenter Server
+[![Build Status](https://travis-ci.com/713-lab/nthu-artscenter-server.svg?branch=master)](https://travis-ci.com/713-lab/nthu-artscenter-server)
 
-Written in Typescript.
-Node.js v.12
-express.js 
+## Dependencies
+- Typescript
+- Node.js 12
+- express.js
+- sequelize
+- postgresql 
 
-## Enviroment Variables
+## Pre-reqs
+To build and run this app locally you will need a few things:
+- Install [Node.js](https://nodejs.org/en/)
+- Install [PostgreSQL](https://www.postgresql.org/download/)
 
+## Getting Started
+
+- Clone the repository
 ```
-SERVER_PORT=8182
-DB_NAME=hello
-DB_USERNAME=hello
-DB_PASSWORD=hello
+git clone https://github.com/713-lab/nthu-artscenter-server.git
+```
+- Install dependencies
+```
+cd <project-name>
+npm install
+```
+- Configure PostgreSQL Server
+```bash
+sudo psql -c 'create database artscenter;' -U postgres
+sudo psql -c "CREATE USER testuser WITH PASSWORD 'testuser';" -U postgres
+sudo psql -c "ALTER USER testuser WITH SUPERUSER;" -U postgres
+```
+- Load the environment variables
+```
+SERVER_PORT=8080
+DB_NAME=artscenter
+DB_USERNAME=testuser
+DB_PASSWORD=testuser
+```
+- Build and Run the server
+```
+npm run build
+npm start
+```
+- Test the server
+```
+npm run test
+```
+- Run test server
+```
+npm run dev
 ```
 
-## Postgresql
+## Project Structure
 
-Remember to run postgresql
+> **Note!** Make sure you have already built the app using `npm run build`
 
-## Files
+| Name | Description |
+| -------------------- | ------------------------------------------------------------ |
+| **dist**             | Output JS from typescript, mv this code to real server       |
+| **node_modules**     | Contains all your npm dependencies                           |
+| **src**              | Source code which will be compiled then stored in dist/      |
+| **src/config**       | Database setting                                             |
+| **src/controllers**  | Functions handles various http requests                      |
+| **src/models**       | Models defined by Sequelize                                  |
+| **src/public**       | Static assets that will be used client side                  |
+| **src**/server.ts    | Entry point to your express app                              |
+| **test**             | Test files                                                   |
+| .env.example         | API keys, tokens, passwords, database URI.                   |
+| .travis.yml          | Used to configure Travis CI build                            |
+| jest.config.js       | Used to configure Jest running tests written in TypeScript   |
+| package.json         |                                                              | 
+| tsconfig.json        | Config settings for compiling server code written in TypeScript |
+| tslint.json          |                                    |
 
-Folder          | Usage             |
---------------- | ----------------- |
-src/            | Source code       |
-src/controllers | Query             |
-src/models      | Database model    |
-src/routes      | Url middleware    |
-src/utils       | Utility function  |
-public/         | static files      |
+# References
+
+- [TypeScript-Node-Starter](https://github.com/microsoft/TypeScript-Node-Starter/blob/master/README.md)
+- [Okta: Use TypeScript to Build a Node API with Express](https://developer.okta.com/blog/2018/11/15/node-express-typescript)
 
 
