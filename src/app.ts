@@ -3,12 +3,16 @@ import bodyParser from 'body-parser';
 import dotenv from "dotenv";
 import routeV2 from './routes/route.v2';
 // import morgan from 'morgan';
-import { startDataBase } from './models/index';
+// import { startDataBase } from './models/index';
 import { db } from './config/database'
 import morganBody from 'morgan-body';
+import { Exhibition } from './models/Exhibition';
+import { Media } from './models/Media';
+
+
+dotenv.config();
 
 const app = express();
-
 
 app.set("port", process.env.SERVER_PORT || 8080);
 

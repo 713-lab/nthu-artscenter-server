@@ -21,6 +21,6 @@ before_script:
   - sudo psql -c "ALTER USER testuser WITH SUPERUSER;" -U postgres
 script:
   - npm run build
-  - psql -c '\c artscenter;' -U postgres
+  - psql -c '\d' -U postgres -d artscenter
   - psql -c '\du;' -U postgres
   - npm run test
