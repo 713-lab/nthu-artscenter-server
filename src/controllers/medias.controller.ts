@@ -10,7 +10,7 @@ export class MediasController {
 
   public index(_req: Request, res: Response) {
     Media.findAll < Media > ({})
-      .then((Medias: Media[]) => res.json(Medias))
+      .then((Medias: Media[]) => res.send(Medias))
       .catch((err: Error) => res.status(500).json(err))
   }
 
