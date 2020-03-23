@@ -79,7 +79,7 @@ Publication.init({
   }, 
   {
     sequelize: db,
-    tableName: 'Publication',
+    tableName: 'publication',
   },
 );
 
