@@ -1,7 +1,6 @@
 import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
 import { db } from '../config/database'
 import { Media } from '../models/Media'
-import { Json } from "sequelize/types/lib/utils";
 
 export class Exhibition extends Model {
   public id!: number;
@@ -99,7 +98,7 @@ Exhibition.init({
   }, 
   {
     sequelize: db,
-    tableName: 'Exhibition',
+    tableName: 'exhibition',
   },
 );
 

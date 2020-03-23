@@ -35,6 +35,6 @@ Media.init({
 
 }, {
   sequelize: db,
-  tableName: 'Media',
+  tableName: 'media',
 });
 
