@@ -3,7 +3,6 @@ import bodyParser from 'body-parser';
 import dotenv from "dotenv";
 import routeV2 from './routes/route.v2';
 // import morgan from 'morgan';
-// import { startDataBase } from './models/index';
 import morganBody from 'morgan-body';
 import path from 'path';
 
@@ -16,10 +15,6 @@ const redisClient = redis.createClient({
   host: process.env.REDISIP || '127.0.0.1',
   port: parseInt(process.env.REDIS_PORT, 10) || 6379
 })
-
-
-
-
 
 dotenv.config();
 

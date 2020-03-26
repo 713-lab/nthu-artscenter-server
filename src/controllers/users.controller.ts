@@ -3,8 +3,6 @@ import { UpdateOptions, DestroyOptions } from 'sequelize';
 import { User } from '../models/User';
 import bcrypt from 'bcrypt';
 
-const saltRounds = 10;
-
 export class UsersController {
   public getLogin(_req: Request, res: Response) {
     res.render("login")
@@ -13,10 +11,9 @@ export class UsersController {
     try {
       // tslint:disable-next-line:no-console
       console.log(req.body);
-      const hashPassword = await bcrypt.hash(req.body.password, saltRounds);
       const userData = await User.create({
         email: req.body.email,
-        password: hashPassword,
+        password: req.body.password,
         name: req.body.name,
         isAdmin: req.body.isAdmin
       });

@@ -1,5 +1,21 @@
 import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
 import { db } from '../config/database';
+import bcrypt from 'bcrypt';
+
+const saltRounds = 10;
+
+const hashPassword = async (user: User) => {
+  try {
+    if(!user.changed('password')){
+      return;
+    }
+    const hash = await bcrypt.hash(user.password, saltRounds);
+    user.setDataValue('password', hash);
+  }catch(err) {
+    throw new Error('Sequelize hash password fail')
+  }
+  
+}
 
 export class User extends Model {
   public id!: number;
@@ -34,9 +50,20 @@ User.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
-  name: DataTypes.STRING
+  name: {
+    type: DataTypes.STRING,
+  },
+  isAdmin: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
 
-}, {
+}, 
+{
+  hooks: {
+    beforeCreate: hashPassword,
+    beforeUpdate: hashPassword,
+  },
   sequelize: db,
   tableName: 'user',
 });
