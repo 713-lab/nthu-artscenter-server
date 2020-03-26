@@ -1,6 +1,7 @@
-import { Sequelize } from "sequelize";
+import {
+  Sequelize
+} from "sequelize";
 import dotenv from "dotenv";
-import path from 'path';
 
 dotenv.config();
 
@@ -12,4 +13,6 @@ const db = new Sequelize({
   logging: false,
 });
 
-export {db}
+export {
+  db
+}

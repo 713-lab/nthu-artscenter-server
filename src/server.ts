@@ -2,11 +2,13 @@ import app from "./app";
 import { Exhibition } from "./models/Exhibition";
 import { Media } from "./models/Media";
 import { Publication } from "./models/Publication";
+import { User } from "./models/User";
 
 
 
 app.listen(app.get("port"), async () => {
   try {
+    await User.sync({alter: true});
     await Exhibition.sync({alter: true});
     await Publication.sync({alter: true});
     // Media should create behind Exhibition and Publication

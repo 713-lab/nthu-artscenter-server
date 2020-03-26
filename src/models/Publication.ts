@@ -1,7 +1,6 @@
 import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
-import { db } from '../config/database'
-import { Media } from '../models/Media'
-import { Json } from "sequelize/types/lib/utils";
+import { db } from '../config/database';
+import { Media } from '../models/Media';
 
 export class Publication extends Model {
   public id!: number;
