@@ -3,8 +3,9 @@ import app from "../src/app";
 import { db } from "../src/config/database"
 
 beforeAll(async () => {
-  await db.sync();
-})
+  await db.sync({alter: true});
+});
+
 describe("Test Sequelize", () => {
   test("should OK", () => {
     db.authenticate()

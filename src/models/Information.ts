@@ -13,6 +13,7 @@ export class Information extends Model {
   public en_description!: string;
 
   public cover!: any;
+  public media!: any;
   public coverId!: number;
 
 }
@@ -28,6 +29,7 @@ export interface InformationInterface {
     en_description: string;
   
     cover: any;
+    media: any;
     coverId: number;
 }
 
@@ -55,13 +57,13 @@ Information.init({
   }, 
   {
     sequelize: db,
-    tableName: 'news',
+    tableName: 'information',
   },
 );
 
 Information.hasMany(Media, {
   sourceKey: "id",
-  foreignKey: "newsId"
+  foreignKey: "informationId"
 });
 
 Information.belongsTo(Media, {

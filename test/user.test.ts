@@ -1,8 +1,8 @@
 import request from "supertest";
 import app from "../src/app";
+import { User } from "../src/models/User";
+import { loadModels } from "../src/models";
 import { db } from "../src/config/database";
-import { User } from '../src/models/User';
-import { doesNotMatch } from "assert";
 
 const server = request(app);
 
@@ -10,13 +10,13 @@ const server = request(app);
 //console.log(`${process.env.DB_NAME}\n${process.env.DB_USERNAME}\n${process.env.DB_PASSWORD}\n${process.env.SERVER_PORT}`)
 
 beforeAll(async () => {
-  await db.sync();
+  await loadModels();
   await User.create({
     email: "test1@gmail.com",
     password: "admintest1",
     name: "test1",
   })
-})
+});
 
 describe("POST /api/v2/login", () => {
   test("should return 'Require email or password'", (done) => {
@@ -32,6 +32,8 @@ describe("POST /api/v2/login", () => {
       done();
     })
   });
+})
+describe("POST /api/v2/login", () => {
   test("should return 'Incorrect Password'", (done) => {
     server.post("/api/v2/login")
     .send({
@@ -47,6 +49,9 @@ describe("POST /api/v2/login", () => {
       done();
     })
   });
+})
+
+describe("POST /api/v2/login", () => {
   test("should return 'User not found'", (done) => {
     server.post("/api/v2/login")
     .send({
@@ -62,6 +67,9 @@ describe("POST /api/v2/login", () => {
       done();
     })
   });
+})
+
+describe("POST /api/v2/login", () => {
   test("should return OK", () => {
     server.post("/api/v2/login")
     .field("email", "test1@gmail.com")

@@ -1,8 +1,10 @@
 import request from "supertest";
 import app from "../src/app";
+import { loadModels } from "../src/models";
 import { db } from "../src/config/database";
-import { Information } from '../src/models/Information';
 import { User } from "../src/models/User";
+import { Information } from "../src/models/Information";
+import { Media } from "../src/models/Media";
 
 const server = request(app);
 
@@ -15,48 +17,50 @@ const testInformation1 = {
   start_date: "2019-01-02",
   isActive: "true"
 }
+
+const testMedia1 = {
+  file: "1.jpg",
+  note: "test 1.jpg",
+  semester: "201902",
+}
+
+const testMedia2 = {
+  file: "2.jpg",
+  note: "test 2.jpg",
+  semester: "201902",
+}
+
 beforeAll(async () => {
-  await db.sync();
-  await Information.create(testInformation1);
+  await loadModels();
   await User.create({
     email: "test1@gmail.com",
     password: "admintest1",
     name: "test1",
-  })
-})
+  });
+  const information = await Information.create(testInformation1);
+  testMedia1['informationId'] = information.id;
+  testMedia2['informationId'] = information.id;
+  await Media.create(testMedia1);
+  await Media.create(testMedia2);
 
-describe("GET /api/v2/Informations", () => {
-  test("should return 200 OK", (done) => {
-    server.get("/api/v2/informations")
-          .expect(200)
-          .end((err, res) => {
-            if(err) {
-              done(err);
-            }
-            expect(res.body[0].id).toBe(1);
-            expect(res.body[0].title).toBe(testInformation1.title);
-            expect(res.body[0].description).toBe(testInformation1.description);
-            expect(res.body[0].start_date).toBe(testInformation1.start_date);
+});
 
-            done();
-          });
+describe("GET /api/v2/informations", () => {
+  test("should return 200 OK", async () => {
+      await server.get("/api/v2/informations")
+          .expect(200);
+    
+
   })
 })
 
 describe("GET /api/v2/informations/1", () => {
-  test("should return 200 OK", (done) => {
-    server.get("/api/v2/informations/1")
+  test("should return 200 OK", async () => {
+    const res = await server.get("/api/v2/informations/1")
           .expect(200)
-          .end((err, res) => {
-            if(err) {
-              done(err);
-            }
-            expect(res.body.id).toBe(1);
-            expect(res.body.title).toBe(testInformation1.title);
-            expect(res.body.description).toBe(testInformation1.description);
-            expect(res.body.start_date).toBe(testInformation1.start_date);
-
-            done();
-          });
+    expect(res.body.id).toBe(1);
+    expect(res.body.title).toBe(testInformation1.title);
+    expect(res.body.description).toBe(testInformation1.description);
+    expect(res.body.start_date).toBe(testInformation1.start_date);
   })
 })

@@ -5,14 +5,25 @@ import { Media } from '../models/Media';
 
 
 export class InformationsController {
-  public index(req: Request, res: Response) {
-    Information.findAll < Information > ({
-      limit: req.query.limit || 12,
-      offset: req.query.offset || 0,
-      order: ['id']
-    })
-      .then((Informations: Information[]) => res.json(Informations))
-      .catch((err: Error) => res.status(500).json(err))
+  public async index(req: Request, res: Response) {
+    try {
+      const informations = await Information.findAll < Information > ({
+        limit: req.query.limit || 12,
+        offset: req.query.offset || 0,
+        order: ['id']
+      })
+      for(const information of informations) {
+        const medias = await Media.findAll({
+          where: {
+            informationId: information.id
+          }
+        });
+        information.setDataValue('media', medias);
+      }
+      res.json(informations)
+    }catch(err) {
+      res.status(500).json(err)
+    }
   }
 
   public create(req: Request, res: Response) {
@@ -35,6 +46,12 @@ export class InformationsController {
           console.log(cover);
           information.setDataValue('cover', cover);
         }
+        const medias = await Media.findAll({
+          where: {
+            informationId: information.id
+          }
+        });
+        information.setDataValue('media', medias);
         return res.json(information);
       }
       else { res.status(404); }
