@@ -8,6 +8,8 @@ export class Media extends Model {
   public semester!: Date;
 
   public exhibitionId!: number;
+  public publicationId!: number;
+  public informationsId!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -19,6 +21,8 @@ export interface MediaInterface {
   note: string;
   semester: Date;
   exhibitionId: number;
+  publicationId: number;
+  informationsId: number;
 }
 
 Media.init({

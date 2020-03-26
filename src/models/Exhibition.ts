@@ -93,8 +93,6 @@ Exhibition.init({
   en_location: DataTypes.STRING,
   en_ticket_info: DataTypes.STRING,
 
-
-
   }, 
   {
     sequelize: db,

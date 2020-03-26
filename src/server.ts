@@ -3,6 +3,7 @@ import { Exhibition } from "./models/Exhibition";
 import { Media } from "./models/Media";
 import { Publication } from "./models/Publication";
 import { User } from "./models/User";
+import { Information } from "./models/Information";
 
 
 
@@ -11,6 +12,7 @@ app.listen(app.get("port"), async () => {
     await User.sync({alter: true});
     await Exhibition.sync({alter: true});
     await Publication.sync({alter: true});
+    await Information.sync({alter: true});
     // Media should create behind Exhibition and Publication
     await Media.sync({alter: true});
 

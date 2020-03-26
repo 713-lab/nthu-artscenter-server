@@ -17,7 +17,7 @@ beforeAll(async () => {
 })
 
 describe("GET /api/v2/publications", () => {
-  it("should return 200 OK", (done) => {
+  test("should return 200 OK", (done) => {
     server.get("/api/v2/publications")
           .expect(200)
           .end((err, res) => {
@@ -34,7 +34,7 @@ describe("GET /api/v2/publications", () => {
 })
 
 describe("GET /api/v2/publications/1", () => {
-  it("should return 200 OK", (done) => {
+  test("should return 200 OK", (done) => {
     server.get("/api/v2/publications/1")
           .expect(200)
           .end((err, res) => {

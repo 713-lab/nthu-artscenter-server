@@ -34,7 +34,7 @@ describe("GET /api/v2/medias", () => {
 })
 
 describe("GET /api/v2/medias/1", () => {
-  it("should return 200 OK", (done) => {
+  test("should return 200 OK", (done) => {
     server.get("/api/v2/medias/1")
           .expect(200)
           .end((err, res) => {

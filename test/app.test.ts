@@ -6,7 +6,7 @@ beforeAll(async () => {
   await db.sync();
 })
 describe("Test Sequelize", () => {
-  it("should OK", () => {
+  test("should OK", () => {
     db.authenticate()
     .then( () => {
       // tslint:disable-next-line:no-console
