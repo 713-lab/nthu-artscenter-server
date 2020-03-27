@@ -54,6 +54,10 @@ beforeAll(async (done) => {
 
 });
 
+afterAll(async () => {
+  await db.close();
+})
+
 describe("GET /api/v2/informations", () => {
   test("should return 200 OK", async () => {
       await server.get("/api/v2/informations")
@@ -73,7 +77,7 @@ describe("GET /api/v2/informations/:id", () => {
     expect(res.body.start_date).toBe(testInformation1.start_date);
   })
 })
-/*
+
 describe("PUT /api/v2/informations/:id", () => {
   test("should return 202 OK", async () => {
     const response = await server.post("/api/v2/login")
@@ -85,15 +89,15 @@ describe("PUT /api/v2/informations/:id", () => {
       .set('Accept', 'application/json')
 
     const session = response.header['set-cookie'];
-    await server.put(`/api/v2/informations/${testInformationId}`)
+    return await server.put(`/api/v2/informations/${testInformationId}`)
           .set("Cookie", session)
           .send({
-            name: "change test1 title"
+            title: "change test1 title"
           })
           .expect(202)
   })
 })
-*/
+
 describe("DELETE /api/v2/informations/:id", () => {
   test("should return 200 OK", async () => {
     const response = await server.post("/api/v2/login")
@@ -105,7 +109,7 @@ describe("DELETE /api/v2/informations/:id", () => {
       .set('Accept', 'application/json')
 
     const session = response.header['set-cookie'];
-    await server.delete(`/api/v2/informations/${testInformationId}`)
+    return await server.delete(`/api/v2/informations/${testInformationId}`)
           .set("Cookie", session)
           .expect(204)
 

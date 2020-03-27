@@ -21,9 +21,13 @@ beforeAll(async (done) => {
   done();
 })
 
+afterAll(async () => {
+  await db.close();
+})
+
 describe("GET /api/v2/publications", () => {
   test("should return 200 OK", async () => {
-    await server.get("/api/v2/publications")
+    return await server.get("/api/v2/publications")
           .expect(200)
   })
 })
@@ -35,5 +39,6 @@ describe("GET /api/v2/publications/:id", () => {
     expect(res.body.id).toBe(testPublicationId);
     expect(res.body.name).toBe("test1");
     expect(res.body.author).toBe("yc&ch");
+    return;
   })
 })

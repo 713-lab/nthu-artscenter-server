@@ -62,22 +62,28 @@ export class InformationsController {
     }
   }
 
-  public update(req: Request, res: Response) {
-    const informationId: string = req.params.id
-    const params: InformationInterface = req.body
+  public async update(req: Request, res: Response) {
+    try {
+      const informationId: string = req.params.id
+      const params: InformationInterface = req.body
 
-    const options: UpdateOptions = {
-      where: {
-        id: informationId
-      },
-      limit: 1
-    }
+      const options: UpdateOptions = {
+        where: {
+          id: informationId
+        },
+        limit: 1
+      }
 
-    Information.update(params, options)
-      .then(() => res.status(202).json({
-        message: "success"
-      }))
-      .catch((err: Error) => res.status(500).json(err))
+      await Information.update(params, options)
+      res.status(202).send({
+        message: "OK"
+      })
+      }catch(err) {
+        res.status(500).send({
+          error: err
+        })
+      }
+    
   }
 
   public delete(req: Request, res: Response) {

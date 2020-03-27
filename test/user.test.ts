@@ -19,6 +19,10 @@ beforeAll(async (done) => {
   done();
 });
 
+afterAll(async () => {
+  await db.close();
+})
+
 describe("POST /api/v2/login", () => {
   test("should return 'Require email or password'", (done) => {
     server.post("/api/v2/login")

@@ -8,12 +8,16 @@ beforeAll(async (done) => {
   done();
 });
 
+afterAll(async () => {
+  await db.close();
+})
+
 describe("Test Sequelize", () => {
-  test("should OK", () => {
+  test("should OK", (done) => {
     db.authenticate()
     .then( () => {
       // tslint:disable-next-line:no-console
-      return true;
+      done();
     })
     .catch( (err) => {
       // tslint:disable-next-line:no-console
