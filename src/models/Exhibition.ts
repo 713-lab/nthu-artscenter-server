@@ -28,6 +28,7 @@ export class Exhibition extends Model {
 
   public coverId!: number;
   public cover!: any;
+  public media!: any;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -57,6 +58,7 @@ export interface ExhibitionInterface {
   en_ticket_info: string;
   coverId: number;
   cover: any;
+  media: any;
 }
 
 Exhibition.init({

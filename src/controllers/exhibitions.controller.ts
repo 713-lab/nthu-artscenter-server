@@ -6,10 +6,25 @@ import { Media } from '../models/Media';
 
 export class ExhibitionsController {
 
-  public index(_req: Request, res: Response) {
-    Exhibition.findAll < Exhibition > ({})
-      .then((Exhibitions: Exhibition[]) => res.json(Exhibitions))
-      .catch((err: Error) => res.status(500).json(err))
+  public async index(req: Request, res: Response) {
+    try {
+      const exhibitions = await Exhibition.findAll < Exhibition > ({
+        limit: req.query.limit || 12,
+        offset: req.query.offset || 0,
+        order: ['id']
+      })
+      for(const exhibition of exhibitions){
+        const medias = await Media.findAll({
+          where: {
+            exhibitionId:  exhibition.id
+          }
+        });
+        exhibition.setDataValue('media', medias);
+      }
+      res.json(exhibitions);
+    }catch(err){
+      res.status(500).json(err);
+    }
   }
 
   public create(req: Request, res: Response) {
@@ -32,6 +47,12 @@ export class ExhibitionsController {
           console.log(cover);
           exhibition.setDataValue('cover', cover);
         }
+        const medias = await Media.findAll({
+          where: {
+            exhibitionId: exhibition.id
+          }
+        });
+        exhibition.setDataValue('media', medias);
         return res.json(exhibition);
       }
       else { res.status(404); }
@@ -42,22 +63,26 @@ export class ExhibitionsController {
     }
   }
 
-  public update(req: Request, res: Response) {
-    const exhibitionId: string = req.params.id
-    const params: ExhibitionInterface = req.body
+  public async update(req: Request, res: Response) {
+    try {
+      const exhibitionId: string = req.params.id
+      const params: ExhibitionInterface = req.body
 
-    const options: UpdateOptions = {
-      where: {
-        id: exhibitionId
-      },
-      limit: 1
-    }
+      const options: UpdateOptions = {
+        where: {
+          id: exhibitionId
+        },
+        limit: 1
+      }
 
-    Exhibition.update(params, options)
-      .then(() => res.status(202).json({
+      await Exhibition.update(params, options)
+      res.status(202).json({
         data: "success"
-      }))
-      .catch((err: Error) => res.status(500).json(err))
+      })
+    }catch(err){
+      res.status(500).json(err)
+    }
+    
   }
 
   public delete(req: Request, res: Response) {
