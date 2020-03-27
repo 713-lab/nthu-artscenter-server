@@ -83,7 +83,7 @@ export class InformationsController {
           error: err
         })
       }
-    
+
   }
 
   public delete(req: Request, res: Response) {
