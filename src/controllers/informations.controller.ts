@@ -75,7 +75,7 @@ export class InformationsController {
 
     Information.update(params, options)
       .then(() => res.status(202).json({
-        data: "success"
+        message: "success"
       }))
       .catch((err: Error) => res.status(500).json(err))
   }
@@ -91,7 +91,7 @@ export class InformationsController {
 
     Information.destroy(options)
       .then(() => res.status(204).json({
-        data: "success"
+        message: "success"
       }))
       .catch((err: Error) => res.status(500).json(err))
   }

@@ -1,9 +1,11 @@
 import request from "supertest";
 import app from "../src/app";
 import { db } from "../src/config/database"
+import { doesNotMatch } from "assert";
 
-beforeAll(async () => {
+beforeAll(async (done) => {
   await db.sync({alter: true});
+  done();
 });
 
 describe("Test Sequelize", () => {
