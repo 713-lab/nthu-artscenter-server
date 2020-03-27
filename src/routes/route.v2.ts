@@ -2,8 +2,10 @@ import express from 'express';
 import { ExhibitionsController } from "../controllers/exhibitions.controller";
 import { PublicationsController } from "../controllers/publications.controller";
 import { MediasController } from "../controllers/medias.controller";
+import { UsersController } from "../controllers/users.controller";
+import { InformationsController } from "../controllers/informations.controller";
 import { upload } from "../utils/multer";
-import { UsersController } from '../controllers/users.controller';
+
 
 const app = express();
 
@@ -11,6 +13,7 @@ const exhibitionsController = new ExhibitionsController();
 const publicationsController = new PublicationsController();
 const mediasController = new MediasController();
 const usersController = new UsersController();
+const informationsController = new InformationsController();
 
 // User
 app
@@ -59,6 +62,17 @@ app
   .get(publicationsController.show)
   .put(publicationsController.update)
   .delete(publicationsController.delete);
+
+app
+  .route("/informations")
+  .get(informationsController.index)
+  .post(usersController.isAuth, informationsController.create);
+
+app
+  .route("/informations/:id")
+  .get(informationsController.show)
+  .put(usersController.isAuth, informationsController.update)
+  .delete(usersController.isAuth, informationsController.delete);
 
 
 export default app;

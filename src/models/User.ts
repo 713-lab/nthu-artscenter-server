@@ -28,7 +28,7 @@ export class User extends Model {
   public readonly updatedAt!: Date;
 }
 
-export interface MediaInterface {
+export interface UserInterface {
   id: number;
   name: string;
   email: string;

@@ -32,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('trust proxy', 1);
 app.use(session({
+  name: "sessionId",
   secret: process.env.SECRET || 'testing artscenter',
   resave: true,
   saveUninitialized: true,
