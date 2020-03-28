@@ -8,20 +8,59 @@ export class ExhibitionsController {
 
   public async index(req: Request, res: Response) {
     try {
-      const exhibitions = await Exhibition.findAll < Exhibition > ({
-        limit: req.query.limit || 12,
-        offset: req.query.offset || 0,
-        order: ['id']
-      })
-      for(const exhibition of exhibitions){
-        const medias = await Media.findAll({
-          where: {
-            exhibitionId:  exhibition.id
-          }
-        });
-        exhibition.setDataValue('media', medias);
+      const typeOfArt = req.query.typeOfArt;
+      const year = req.query.year;
+      const searchStr = req.query.searchStr;
+      if(!typeOfArt && !year  && !searchStr){
+        const exhibitions = await Exhibition.findAll < Exhibition > ({
+          limit: req.query.limit || 12,
+          offset: req.query.offset || 0,
+          order: ['id']
+        })
+        for(const exhibition of exhibitions){
+          const medias = await Media.findAll({
+            where: {
+              exhibitionId:  exhibition.id
+            }
+          });
+          exhibition.setDataValue('media', medias);
+        }
+        res.json(exhibitions);
       }
-      res.json(exhibitions);
+      else{
+        let exhibitions = await Exhibition.findAll < Exhibition > ({});
+        if(typeOfArt){
+          exhibitions = exhibitions.filter((item) => {
+            return item.type === typeOfArt;
+          })
+        }
+        if(year){
+          exhibitions = exhibitions.filter((item) => {
+            // not finish yet
+            const startDate: Date= new Date(item.start_date);
+            const lowBound: Date = new Date();
+            const upBound: Date = new Date();
+            lowBound.setFullYear(year, 0, 1);
+            upBound.setFullYear(year, 11, 31);
+            return lowBound.getTime() < startDate.getTime() && upBound.getTime() > startDate.getTime();
+          })
+        }
+        if(searchStr){
+          exhibitions = exhibitions.filter((item) => {
+            const patt = new RegExp(searchStr);
+            return patt.test(item.title) || patt.test(item.performer);
+          })
+        }
+        for(const exhibition of exhibitions){
+          const medias = await Media.findAll({
+            where: {
+              exhibitionId:  exhibition.id
+            }
+          });
+          exhibition.setDataValue('media', medias);
+        }
+        res.json(exhibitions);
+      }
     }catch(err){
       res.status(500).json(err);
     }
@@ -82,7 +121,7 @@ export class ExhibitionsController {
     }catch(err){
       res.status(500).json(err)
     }
-    
+
   }
 
   public delete(req: Request, res: Response) {
