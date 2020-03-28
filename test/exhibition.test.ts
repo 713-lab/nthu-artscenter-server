@@ -167,7 +167,7 @@ describe("GET /api/v2/exhibitions?searchStr=ChiaHsin", () => {
 
 describe("GET /api/v2/exhibitions?searchStr=test", () => {
     test("should return 200 OK", async () => {
-        const res = await server.get("/api/v2/exhibitions?searchStr=ChiaHsin")
+        const res = await server.get("/api/v2/exhibitions?searchStr=test")
             .expect(200);
         expect(res.body[0].id).toBe(testExhibitionId);
         expect(res.body[1].id).toBe(testExhibitionId2);
