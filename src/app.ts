@@ -20,7 +20,7 @@ dotenv.config();
 
 const app = express();
 
-app.set("port", process.env.SERVER_PORT || 8080);
+app.set("port", process.env.SERVER_PORT || 8090);
 
 redisClient.on('error', (err) => {
   // tslint:disable-next-line:no-console
@@ -42,6 +42,8 @@ app.use(session({
 
 // app.use(morgan('combined'));
 morganBody(app);
+
+app.use(express.static(path.join(__dirname, "../public")));
 
 app.use('/api/v2', routeV2);
 app.set("views", path.join(__dirname, "../views"));
