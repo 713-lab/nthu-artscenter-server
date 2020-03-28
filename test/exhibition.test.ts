@@ -16,21 +16,24 @@ const testExhibition1: any = {
     title: "test exhibition 1",
     description: "test exhibition 1 description",
     type: "visual_arts",
-    start_date: "2019-02-27"
+    start_date: "2019-02-27",
+    performer: "artscenter"
 }
 
 const testExhibition2: any = {
     title: "test exhibition 2",
     description: "test exhibition 2 description",
     type: "film",
-    start_date: "2019-02-27"
+    start_date: "2019-02-27",
+    performer: "ChiaHsin"
 }
 
 const testExhibition3: any = {
     title: "test exhibition 3",
     description: "test exhibition 3 description",
     type: "visual_arts",
-    start_date: "2018-02-27"
+    start_date: "2018-02-27",
+    performer: "ChiaHsin"
 }
 
 const testMedia1 = {
@@ -142,6 +145,33 @@ describe("GET /api/v2/exhibitions?year=2019", () => {
         expect(res.body[1].description).toBe(testExhibition2.description);
         expect(res.body[1].start_date).toBe(testExhibition2.start_date);
         expect(res.body[1].type).toBe(testExhibition2.type);
+    })
+})
+
+describe("GET /api/v2/exhibitions?searchStr=ChiaHsin", () => {
+    test("should return 200 OK", async () => {
+        const res = await server.get("/api/v2/exhibitions?searchStr=ChiaHsin")
+            .expect(200);
+        expect(res.body[0].id).toBe(testExhibitionId2);
+        expect(res.body[0].title).toBe(testExhibition2.title);
+        expect(res.body[0].description).toBe(testExhibition2.description);
+        expect(res.body[0].start_date).toBe(testExhibition2.start_date);
+        expect(res.body[0].type).toBe(testExhibition2.type);
+        expect(res.body[1].id).toBe(testExhibitionId3);
+        expect(res.body[1].title).toBe(testExhibition3.title);
+        expect(res.body[1].description).toBe(testExhibition3.description);
+        expect(res.body[1].start_date).toBe(testExhibition3.start_date);
+        expect(res.body[1].type).toBe(testExhibition3.type);
+    })
+})
+
+describe("GET /api/v2/exhibitions?searchStr=test", () => {
+    test("should return 200 OK", async () => {
+        const res = await server.get("/api/v2/exhibitions?searchStr=ChiaHsin")
+            .expect(200);
+        expect(res.body[0].id).toBe(testExhibitionId);
+        expect(res.body[1].id).toBe(testExhibitionId2);
+        expect(res.body[2].id).toBe(testExhibitionId3);
     })
 })
 
