@@ -11,6 +11,10 @@ export class Media extends Model {
   public publicationId!: number;
   public informationId!: number;
 
+  public src!: string;
+  public src_cover!: string;
+  public src_thumb!: string;
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Exhibition, ExhibitionInterface } from '../models/Exhibition'
 import { UpdateOptions, DestroyOptions } from 'sequelize'
 import { Media } from '../models/Media';
+import { UPLOAD_DIR } from '../config/config';
 
 
 export class ExhibitionsController {
@@ -84,6 +85,9 @@ export class ExhibitionsController {
           const cover = await Media.findByPk(exhibition.coverId);
           // tslint:disable-next-line:no-console
           console.log(cover);
+          cover.setDataValue('src', UPLOAD_DIR + '/' + cover.semester + '/' + cover.file);
+          cover.setDataValue('src_cover', UPLOAD_DIR + '/' + cover.semester + '/cover_' + cover.file);
+          cover.setDataValue('src_thumb', UPLOAD_DIR + '/' + cover.semester + '/thumb_' + cover.file);
           exhibition.setDataValue('cover', cover);
         }
         const medias = await Media.findAll({
@@ -91,6 +95,11 @@ export class ExhibitionsController {
             exhibitionId: exhibition.id
           }
         });
+        for(const media of medias) {
+          media.setDataValue('src', UPLOAD_DIR + '/' + media.semester + '/' + media.file);
+          media.setDataValue('src_cover', UPLOAD_DIR + '/' + media.semester + '/cover_' + media.file);
+          media.setDataValue('src_thumb', UPLOAD_DIR + '/' + media.semester + '/thumb_' + media.file);
+        }
         exhibition.setDataValue('media', medias);
         return res.json(exhibition);
       }

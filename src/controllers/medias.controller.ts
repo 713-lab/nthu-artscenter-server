@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Media, MediaInterface } from '../models/Media';
 import { UpdateOptions, DestroyOptions } from 'sequelize';
 import * as path from 'path';
-
+import { UPLOAD_DIR } from '../config/config';
 import { storeTwoSizePic, moveTmpFilesToRightFolder, generateIndexFolder } from '../utils/sharp';
 
 
@@ -10,7 +10,16 @@ export class MediasController {
 
   public async index(_req: Request, res: Response) {
     try {
-      const medias: Media[] = await Media.findAll < Media > ({});
+      const medias: Media[] = await Media.findAll < Media > ({
+        limit: _req.query.limit || 12,
+        offset: _req.query.offset || 0,
+        order: ['id']
+      });
+      for(const media of medias) {
+        media.setDataValue('src', UPLOAD_DIR + '/' + media.semester + '/' + media.file);
+        media.setDataValue('src_cover', UPLOAD_DIR + '/' + media.semester + '/cover_' + media.file);
+        media.setDataValue('src_thumb', UPLOAD_DIR + '/' + media.semester + '/thumb_' + media.file);
+      }
       res.send(medias);
     } catch(err) {
       res.status(500).send({message: err})
@@ -33,6 +42,9 @@ export class MediasController {
     Media.findByPk < Media > (mediaId)
       .then((media: Media | null) => {
         if (media) {
+          media.setDataValue('src', UPLOAD_DIR + '/' + media.semester + '/' + media.file);
+          media.setDataValue('src_cover', UPLOAD_DIR + '/' + media.semester + '/cover_' + media.file);
+          media.setDataValue('src_thumb', UPLOAD_DIR + '/' + media.semester + '/thumb_' + media.file);
           res.json(media)
         } else {
           res.status(404).json({
@@ -79,6 +91,8 @@ export class MediasController {
 
   public async preprocess(req: Request, res: Response, next: any) {
     try {
+      // tslint:disable-next-line:no-console
+      console.log(req.file);
       await storeTwoSizePic(req.file.destination, req.file.filename);
       let folderName: string;
       const semester: string = req.body.semester;
