@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  postgres:
+    restart: always
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: testuser
+      POSTGRES_USER: testuser
+    volumes:
+      - /data/postgres:/var/lib/postgresql/data
+  redis:
+    restart: always
+    image: redis
+  server:
+    restart: always
+    image: chiahsin0227/nthu_artscenter_server
+    environment:
+      DB_NAME: testuser
+      DB_USERNAME: testuser
+      DB_PASSWORD: testuser
+      REDISIP: redis
+      DB_HOST: postgres
+      DB_PORT: 5432
+      SERVER_URL: http://localhost:8090
+    volumes:
+      - /data/public:/server/public
+    ports:
+      - 8090:8090
