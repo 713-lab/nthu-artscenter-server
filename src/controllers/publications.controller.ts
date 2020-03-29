@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Publication, PublicationInterface } from '../models/Publication'
-import { UpdateOptions, DestroyOptions } from 'sequelize'
+import { Publication, PublicationInterface } from '../models/Publication';
+import { UpdateOptions, DestroyOptions } from 'sequelize';
 import { Media } from '../models/Media';
 
 
@@ -9,25 +9,25 @@ export class PublicationsController {
   public index(_req: Request, res: Response) {
     Publication.findAll < Publication > ({})
       .then((Publications: Publication[]) => res.json(Publications))
-      .catch((err: Error) => res.status(500).json(err))
+      .catch((err: Error) => res.status(500).json(err));
   }
 
   public create(req: Request, res: Response) {
-    const params: PublicationInterface = req.body
+    const params: PublicationInterface = req.body;
 
     Publication.create < Publication > (params)
       .then((publication: Publication) => res.status(201).json(publication))
-      .catch((err: Error) => res.status(500).json(err))
+      .catch((err: Error) => res.status(500).json(err));
   }
 
   public async show(req: Request, res: Response) {
     try {
-      const publicationId: string = req.params.id
-      const publication: Publication | null = await Publication.findByPk < Publication > (publicationId);
+      const publication_id: string = req.params.id;
+      const publication: Publication | null = await Publication.findByPk < Publication > (publication_id);
       // tslint:disable-next-line:no-console
       if (publication) {
-        if(publication.coverId){
-          const cover = await Media.findByPk(publication.coverId);
+        if(publication.cover_id){
+          const cover = await Media.findByPk(publication.cover_id);
           // tslint:disable-next-line:no-console
           console.log(cover);
           publication.setDataValue('cover', cover);
@@ -43,36 +43,36 @@ export class PublicationsController {
   }
 
   public update(req: Request, res: Response) {
-    const publicationId: string = req.params.id
-    const params: PublicationInterface = req.body
+    const publication_id: string = req.params.id;
+    const params: PublicationInterface = req.body;
 
     const options: UpdateOptions = {
       where: {
-        id: publicationId
+        id: publication_id,
       },
-      limit: 1
-    }
+      limit: 1,
+    };
 
     Publication.update(params, options)
       .then(() => res.status(202).json({
-        data: "success"
+        message: "success",
       }))
-      .catch((err: Error) => res.status(500).json(err))
+      .catch((err: Error) => res.status(500).json(err));
   }
 
   public delete(req: Request, res: Response) {
-    const publicationId: string = req.params.id
+    const publication_id: string = req.params.id;
     const options: DestroyOptions = {
       where: {
-        id: publicationId
+        id: publication_id,
       },
-      limit: 1
-    }
+      limit: 1,
+    };
 
     Publication.destroy(options)
       .then(() => res.status(204).json({
-        data: "success"
+        message: "success",
       }))
-      .catch((err: Error) => res.status(500).json(err))
+      .catch((err: Error) => res.status(500).json(err));
   }
 }

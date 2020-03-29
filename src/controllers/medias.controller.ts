@@ -13,7 +13,7 @@ export class MediasController {
       const medias: Media[] = await Media.findAll < Media > ({
         limit: _req.query.limit || 12,
         offset: _req.query.offset || 0,
-        order: ['id']
+        order: ['id'],
       });
       for(const media of medias) {
         media.setDataValue('src', UPLOAD_DIR + '/' + media.semester + '/' + media.file);
@@ -22,7 +22,7 @@ export class MediasController {
       }
       res.send(medias);
     } catch(err) {
-      res.status(500).send({message: err})
+      res.status(500).send({message: err});
     }
   }
 
@@ -33,60 +33,60 @@ export class MediasController {
 
     Media.create < Media > (params)
       .then((media: Media) => res.status(201).json(media))
-      .catch((err: Error) => res.status(500).json(err))
+      .catch((err: Error) => res.status(500).json(err));
   }
 
   public show(req: Request, res: Response) {
-    const mediaId: string = req.params.id
+    const media_id: string = req.params.id;
 
-    Media.findByPk < Media > (mediaId)
+    Media.findByPk < Media > (media_id)
       .then((media: Media | null) => {
         if (media) {
           media.setDataValue('src', UPLOAD_DIR + '/' + media.semester + '/' + media.file);
           media.setDataValue('src_cover', UPLOAD_DIR + '/' + media.semester + '/cover_' + media.file);
           media.setDataValue('src_thumb', UPLOAD_DIR + '/' + media.semester + '/thumb_' + media.file);
-          res.json(media)
+          res.json(media);
         } else {
           res.status(404).json({
-            errors: ['Media not found']
-          })
+            errors: ['Media not found'],
+          });
         }
       })
-      .catch((err: Error) => res.status(500).json(err))
+      .catch((err: Error) => res.status(500).json(err));
   }
 
   public update(req: Request, res: Response) {
-    const mediaId: string = req.params.id
-    const params: MediaInterface = req.body
+    const media_id: string = req.params.id;
+    const params: MediaInterface = req.body;
 
     const options: UpdateOptions = {
       where: {
-        id: mediaId
+        id: media_id,
       },
-      limit: 1
-    }
+      limit: 1,
+    };
 
     Media.update(params, options)
       .then(() => res.status(202).json({
-        data: "success"
+        data: "success",
       }))
-      .catch((err: Error) => res.status(500).json(err))
+      .catch((err: Error) => res.status(500).json(err));
   }
 
   public delete(req: Request, res: Response) {
-    const mediaId: string = req.params.id
+    const media_id: string = req.params.id;
     const options: DestroyOptions = {
       where: {
-        id: mediaId
+        id: media_id,
       },
-      limit: 1
-    }
+      limit: 1,
+    };
 
     Media.destroy(options)
       .then(() => res.status(204).json({
-        data: "success"
+        data: "success",
       }))
-      .catch((err: Error) => res.status(500).json(err))
+      .catch((err: Error) => res.status(500).json(err));
   }
 
   public async preprocess(req: Request, res: Response, next: any) {
@@ -114,7 +114,7 @@ export class MediasController {
       // tslint:disable-next-line:no-console
       console.log(err);
       return res.status(500).json({
-        message: "preprocess error"
+        message: "preprocess error",
       });
     }
   }

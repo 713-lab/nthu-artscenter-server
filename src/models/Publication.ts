@@ -2,7 +2,7 @@ import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
 import { db } from '../config/database';
 import { Media } from '../models/Media';
 
-export class Publication extends Model {
+class Publication extends Model {
   public id!: number;
   public isbn!: string;
   public name!: string;
@@ -14,7 +14,7 @@ export class Publication extends Model {
   public spec!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-  public coverId!: number;
+  public cover_id!: number;
 
   public en_name!: string;
   public en_author!: string;
@@ -25,7 +25,7 @@ export class Publication extends Model {
 
 }
 
-export interface PublicationInterface {
+interface PublicationInterface {
     id: number;
     isbn: string;
     name: string;
@@ -37,7 +37,7 @@ export interface PublicationInterface {
     spec: string;
     createdAt: Date;
     updatedAt: Date;
-    coverId: number;
+    cover_id: number;
   
     en_name: string;
     en_author: string;
@@ -73,8 +73,6 @@ Publication.init({
   en_publisher: DataTypes.STRING,
   en_spec: DataTypes.STRING,
 
-
-
   }, 
   {
     sequelize: db,
@@ -84,11 +82,13 @@ Publication.init({
 
 Publication.hasMany(Media, {
   sourceKey: "id",
-  foreignKey: "publicationId"
+  foreignKey: "publication_id"
 });
 
 Publication.belongsTo(Media, {
   as: 'cover',
+  foreignKey: "cover_id",
   constraints: false,
 });
 
+export { Publication, PublicationInterface };

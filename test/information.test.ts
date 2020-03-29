@@ -40,8 +40,8 @@ beforeAll(async (done) => {
       name: "test1",
     });  
     const information = await Information.create(testInformation1);
-    testMedia1['informationId'] = information.id;
-    testMedia2['informationId'] = information.id;
+    testMedia1['information_id'] = information.id;
+    testMedia2['information_id'] = information.id;
     testInformationId = information.id;
     await Media.create(testMedia1);
     await Media.create(testMedia2);

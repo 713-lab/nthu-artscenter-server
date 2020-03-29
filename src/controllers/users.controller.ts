@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 
 export class UsersController {
   public getLogin(_req: Request, res: Response) {
-    res.render("login")
+    res.render("login");
   }
   public async register(req: Request, res: Response) {
     try {
@@ -15,16 +15,16 @@ export class UsersController {
         email: req.body.email,
         password: req.body.password,
         name: req.body.name,
-        isAdmin: req.body.isAdmin
+        isAdmin: req.body.isAdmin,
       });
       res.status(200).send({
         email: userData.email,
-        name: userData.name
-      })
+        name: userData.name,
+      });
     }catch(err) {
       res.status(500).send({
-        message: err.message
-      })
+        message: err.message,
+      });
     }
   }
 
@@ -38,15 +38,15 @@ export class UsersController {
           // tslint:disable-next-line:no-console
           // console.log(req.body.email + '\n' + req.session.email)
             return res.status(200).send({
-              message: `User: ${req.session.email} are already logined.`
-            })
+              message: `User: ${req.session.email} are already logined.`,
+            });
         }
       }
 
       const userData = await User.findOne({
         where: {
-          email: req.body.email
-        }
+          email: req.body.email,
+        },
       });
       if(!userData) {
         throw new Error('User not found');
@@ -58,21 +58,21 @@ export class UsersController {
           req.session.regenerate((err) => {
             if(err){
               return res.status(500).send({
-                message: "Login failed"
-              })
+                message: "Login failed",
+              });
             }
             req.session.email = req.body.email;
             req.session.isLogin = true;
             return res.status(200).send({
-              message: `User ${req.session.email} login with sessionId=${req.session.id}`
+              message: `User ${req.session.email} login with sessionId=${req.session.id}`,
             });
-          })
+          });
 
         }
       }
     } catch(err) {
       return res.status(500).send({
-        message: err.message
+        message: err.message,
       });
     }
 
@@ -83,11 +83,11 @@ export class UsersController {
       req.session.destroy((err) => {
         if(err) {
           return res.status(500).send({
-            message: "Error when destroy session"
-          })
+            message: "Error when destroy session",
+          });
         }
         res.status(200).send({
-          message: "Logout"
+          message: "Logout",
         });
       });
     }else {
@@ -101,7 +101,7 @@ export class UsersController {
     try {
       if(req.session.isLogin){
         // tslint:disable-next-line:no-console
-        console.log(req.session)
+        console.log(req.session);
         next();
       }
       else{
@@ -109,7 +109,7 @@ export class UsersController {
       }
     }catch(err) {
       res.status(500).send({
-        message: err.message
+        message: err.message,
       });
     }
   }

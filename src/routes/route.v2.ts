@@ -5,6 +5,7 @@ import { MediasController } from "../controllers/medias.controller";
 import { UsersController } from "../controllers/users.controller";
 import { InformationsController } from "../controllers/informations.controller";
 import { upload } from "../utils/multer";
+import { BannersController } from '../controllers/banners.controller';
 
 
 const app = express();
@@ -14,20 +15,21 @@ const publicationsController = new PublicationsController();
 const mediasController = new MediasController();
 const usersController = new UsersController();
 const informationsController = new InformationsController();
+const bannersController = new BannersController();
 
 // User
 app
   .route("/login")
   .get(usersController.getLogin)
-  .post(usersController.login)
+  .post(usersController.login);
 
 app
   .route("/logout")
-  .get(usersController.logout)
+  .get(usersController.logout);
 
 app
   .route("/register")
-  .post(usersController.register)
+  .post(usersController.register);
 app
   .route("/exhibitions")
   .get(exhibitionsController.index)
@@ -74,5 +76,16 @@ app
   .put(usersController.isAuth, informationsController.update)
   .delete(usersController.isAuth, informationsController.delete);
 
+// Banner
+app
+  .route("/banners")
+  .get(bannersController.index)
+  .post(usersController.isAuth, bannersController.create);
+
+app
+  .route("/banners/:id")
+  .get(bannersController.show)
+  .put(usersController.isAuth, bannersController.update)
+  .delete(usersController.isAuth, bannersController.delete);
 
 export default app;
