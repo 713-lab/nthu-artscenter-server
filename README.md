@@ -32,10 +32,12 @@ sudo psql -c "ALTER USER testuser WITH SUPERUSER;" -U postgres
 ```
 - Load the environment variables
 ```
-SERVER_PORT=8080
-DB_NAME=artscenter
-DB_USERNAME=testuser
-DB_PASSWORD=testuser
+DB_NAME: testuser
+DB_USERNAME: testuser
+DB_PASSWORD: testuser
+DB_PORT: 5432
+SERVER_URL: http://localhost:8090
+SERVER_PORT: 8090
 ```
 - Build and Run the server
 ```
@@ -49,6 +51,13 @@ npm run test
 - Run test server
 ```
 npm run dev
+```
+
+## Docker support
+
+- Run with `docker-compose`
+```bash
+docker-compose up
 ```
 
 ## Project Structure
