@@ -1,15 +1,15 @@
 import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
 import { db } from '../config/database'
 
-export class Media extends Model {
+class Media extends Model {
   public id!: number;
   public file!: string;
   public note!: string;
   public semester!: Date;
 
-  public exhibitionId!: number;
-  public publicationId!: number;
-  public informationId!: number;
+  public exhibition_id!: number;
+  public publication_id!: number;
+  public information_id!: number;
 
   public src!: string;
   public src_cover!: string;
@@ -19,14 +19,14 @@ export class Media extends Model {
   public readonly updatedAt!: Date;
 }
 
-export interface MediaInterface {
+interface MediaInterface {
   id: number;
   file: string;
   note: string;
   semester: Date;
-  exhibitionId: number;
-  publicationId: number;
-  informationId: number;
+  exhibition_id: number;
+  publication_id: number;
+  information_id: number;
 }
 
 Media.init({
@@ -48,4 +48,6 @@ Media.init({
   sequelize: db,
   tableName: 'media',
 });
+
+export { Media, MediaInterface };
 

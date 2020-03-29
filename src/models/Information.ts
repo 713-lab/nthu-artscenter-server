@@ -2,7 +2,7 @@ import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
 import { db } from '../config/database';
 import { Media } from './Media';
 
-export class Information extends Model {
+class Information extends Model {
   public id!: number;
   public title!: string;
   public description!: string;
@@ -14,11 +14,11 @@ export class Information extends Model {
 
   public cover!: any;
   public media!: any;
-  public coverId!: number;
+  public cover_id!: number;
 
 }
 
-export interface InformationInterface {
+interface InformationInterface {
     id: number;
     title: string;
     description: string;
@@ -30,7 +30,7 @@ export interface InformationInterface {
   
     cover: any;
     media: any;
-    coverId: number;
+    cover_id: number;
 }
 
 Information.init({
@@ -63,11 +63,13 @@ Information.init({
 
 Information.hasMany(Media, {
   sourceKey: "id",
-  foreignKey: "informationId"
+  foreignKey: "information_id"
 });
 
 Information.belongsTo(Media, {
   as: 'cover',
+  foreignKey: "cover_id",
   constraints: false,
 });
 
+export { Information, InformationInterface };

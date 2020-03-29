@@ -17,7 +17,7 @@ const hashPassword = async (user: User) => {
   
 }
 
-export class User extends Model {
+class User extends Model {
   public id!: number;
   public name!: string;
   public email!: string;
@@ -28,7 +28,7 @@ export class User extends Model {
   public readonly updatedAt!: Date;
 }
 
-export interface UserInterface {
+interface UserInterface {
   id: number;
   name: string;
   email: string;
@@ -68,5 +68,6 @@ User.init({
   tableName: 'user',
 });
 
+export { User, UserInterface };
 
 

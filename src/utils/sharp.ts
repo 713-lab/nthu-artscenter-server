@@ -22,16 +22,16 @@ export const storeTwoSizePic = async (destination, filename) => {
                 .resize(230,null)
                 .jpeg({
                   quality:75,
-                  progressive:true
+                  progressive:true,
                 })
                 .toFile(thumbFilename);
     await Promise.all([coverPipe, thumbPipe]);
 
   } catch(err) {
     // tslint:disable-next-line:no-console
-    console.log(err)
+    console.log(err);
   }
-}
+};
 
 export const moveTmpFilesToRightFolder = async (subDir) => {
   try {
@@ -46,22 +46,22 @@ export const moveTmpFilesToRightFolder = async (subDir) => {
       const to = path.join(targetDir, file);
       const response = await fs.promises.rename(from, to);
       return response;
-    })
+    });
     await Promise.all(promises);
   } catch(err) {
     // tslint:disable-next-line:no-console
     console.log(err);
   }
-}
+};
 
 export const generateIndexFolder = (date: Date) => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   let folderName;
   if (month >= 2 && month < 9) {
-    folderName = year.toString() + '02'
+    folderName = year.toString() + '02';
   } else {
-    folderName = year.toString() + '09'
+    folderName = year.toString() + '09';
   }
   return folderName;
-}
+};

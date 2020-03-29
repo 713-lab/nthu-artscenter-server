@@ -13,8 +13,8 @@ import session from 'express-session';
 const RedisStore = connectRedis(session);
 const redisClient = redis.createClient({
   host: process.env.REDISIP || '127.0.0.1',
-  port: parseInt(process.env.REDIS_PORT, 10) || 6379
-})
+  port: parseInt(process.env.REDIS_PORT, 10) || 6379,
+});
 
 dotenv.config();
 
@@ -38,7 +38,7 @@ app.use(session({
   saveUninitialized: true,
   store: new RedisStore( { client: redisClient }),
   cookie: { secure: process.env.isHTTPS === 'true' || false, maxAge: 600 * 1000 },
-}))
+}));
 
 // app.use(morgan('combined'));
 morganBody(app);

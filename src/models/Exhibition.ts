@@ -2,7 +2,7 @@ import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
 import { db } from '../config/database'
 import { Media } from '../models/Media'
 
-export class Exhibition extends Model {
+class Exhibition extends Model {
   public id!: number;
   public type!: string;
   public title!: string;
@@ -26,7 +26,7 @@ export class Exhibition extends Model {
   public en_location!: string;
   public en_ticket_info!: string;
 
-  public coverId!: number;
+  public cover_id!: number;
   public cover!: any;
   public media!: any;
 
@@ -34,7 +34,7 @@ export class Exhibition extends Model {
   public readonly updatedAt!: Date;
 }
 
-export interface ExhibitionInterface {
+interface ExhibitionInterface {
   id: number;
   type: string;
   title: string;
@@ -56,7 +56,7 @@ export interface ExhibitionInterface {
   en_performer: string;
   en_location: string;
   en_ticket_info: string;
-  coverId: number;
+  cover_id: number;
   cover: any;
   media: any;
 }
@@ -104,11 +104,14 @@ Exhibition.init({
 
 Exhibition.hasMany(Media, {
   sourceKey: "id",
-  foreignKey: "exhibitionId"
+  foreignKey: "exhibition_id"
 });
 
 Exhibition.belongsTo(Media, {
   as: 'cover',
+  foreignKey: "cover_id",
   constraints: false,
 });
+
+export { Exhibition, ExhibitionInterface};
 

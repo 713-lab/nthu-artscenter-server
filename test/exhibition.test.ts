@@ -70,19 +70,19 @@ beforeAll(async (done) => {
         });
         //exhibition 1
         const exhibition1 = await Exhibition.create(testExhibition1);
-        testMedia1['exhibitionId'] = exhibition1.id;
-        testMedia2['exhibitionId'] = exhibition1.id;
+        testMedia1['exhibition_id'] = exhibition1.id;
+        testMedia2['exhibition_id'] = exhibition1.id;
         testExhibitionId = exhibition1.id;
         await Media.create(testMedia1);
         await Media.create(testMedia2);
         //exhibition 2
         const exhibition2 = await Exhibition.create(testExhibition2);
-        testMedia3['exhibitionId'] = exhibition2.id;
+        testMedia3['exhibition_id'] = exhibition2.id;
         testExhibitionId2 = exhibition2.id;
         await Media.create(testMedia3);
         //exhibition 3
         const exhibition3 = await Exhibition.create(testExhibition3);
-        testMedia4['exhibitionId'] = exhibition3.id;
+        testMedia4['exhibition_id'] = exhibition3.id;
         testExhibitionId3 = exhibition3.id;
         await Media.create(testMedia4);
         done();

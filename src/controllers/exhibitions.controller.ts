@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Exhibition, ExhibitionInterface } from '../models/Exhibition'
-import { UpdateOptions, DestroyOptions } from 'sequelize'
+import { Exhibition, ExhibitionInterface } from '../models/Exhibition';
+import { UpdateOptions, DestroyOptions } from 'sequelize';
 import { Media } from '../models/Media';
 import { UPLOAD_DIR } from '../config/config';
 
@@ -16,13 +16,13 @@ export class ExhibitionsController {
         const exhibitions = await Exhibition.findAll < Exhibition > ({
           limit: req.query.limit || 12,
           offset: req.query.offset || 0,
-          order: ['id']
-        })
+          order: ['id'],
+        });
         for(const exhibition of exhibitions){
           const medias = await Media.findAll({
             where: {
-              exhibitionId:  exhibition.id
-            }
+              exhibition_id:  exhibition.id,
+            },
           });
           exhibition.setDataValue('media', medias);
         }
@@ -33,7 +33,7 @@ export class ExhibitionsController {
         if(typeOfArt){
           exhibitions = exhibitions.filter((item) => {
             return item.type === typeOfArt;
-          })
+          });
         }
         if(year){
           exhibitions = exhibitions.filter((item) => {
@@ -44,19 +44,19 @@ export class ExhibitionsController {
             lowBound.setFullYear(year, 0, 1);
             upBound.setFullYear(year, 11, 31);
             return lowBound.getTime() < startDate.getTime() && upBound.getTime() > startDate.getTime();
-          })
+          });
         }
         if(searchStr){
           exhibitions = exhibitions.filter((item) => {
             const patt = new RegExp(searchStr);
             return patt.test(item.title) || patt.test(item.performer);
-          })
+          });
         }
         for(const exhibition of exhibitions){
           const medias = await Media.findAll({
             where: {
-              exhibitionId:  exhibition.id
-            }
+              exhibition_id:  exhibition.id,
+            },
           });
           exhibition.setDataValue('media', medias);
         }
@@ -68,21 +68,21 @@ export class ExhibitionsController {
   }
 
   public create(req: Request, res: Response) {
-    const params: ExhibitionInterface = req.body
+    const params: ExhibitionInterface = req.body;
 
     Exhibition.create < Exhibition > (params)
       .then((exhibition: Exhibition) => res.status(201).json(exhibition))
-      .catch((err: Error) => res.status(500).json(err))
+      .catch((err: Error) => res.status(500).json(err));
   }
 
   public async show(req: Request, res: Response) {
     try {
-      const exhibitionId: string = req.params.id
-      const exhibition: Exhibition | null = await Exhibition.findByPk < Exhibition > (exhibitionId);
+      const exhibition_id: string = req.params.id;
+      const exhibition: Exhibition | null = await Exhibition.findByPk < Exhibition > (exhibition_id);
       // tslint:disable-next-line:no-console
       if (exhibition) {
-        if(exhibition.coverId){
-          const cover = await Media.findByPk(exhibition.coverId);
+        if(exhibition.cover_id){
+          const cover = await Media.findByPk(exhibition.cover_id);
           // tslint:disable-next-line:no-console
           console.log(cover);
           cover.setDataValue('src', UPLOAD_DIR + '/' + cover.semester + '/' + cover.file);
@@ -92,8 +92,8 @@ export class ExhibitionsController {
         }
         const medias = await Media.findAll({
           where: {
-            exhibitionId: exhibition.id
-          }
+            exhibition_id: exhibition.id,
+          },
         });
         for(const media of medias) {
           media.setDataValue('src', UPLOAD_DIR + '/' + media.semester + '/' + media.file);
@@ -113,39 +113,39 @@ export class ExhibitionsController {
 
   public async update(req: Request, res: Response) {
     try {
-      const exhibitionId: string = req.params.id
-      const params: ExhibitionInterface = req.body
+      const exhibition_id: string = req.params.id;
+      const params: ExhibitionInterface = req.body;
 
       const options: UpdateOptions = {
         where: {
-          id: exhibitionId
+          id: exhibition_id,
         },
-        limit: 1
-      }
+        limit: 1,
+      };
 
-      await Exhibition.update(params, options)
+      await Exhibition.update(params, options);
       res.status(202).json({
-        data: "success"
-      })
+        data: "success",
+      });
     }catch(err){
-      res.status(500).json(err)
+      res.status(500).json(err);
     }
 
   }
 
   public delete(req: Request, res: Response) {
-    const exhibitionId: string = req.params.id
+    const exhibition_id: string = req.params.id;
     const options: DestroyOptions = {
       where: {
-        id: exhibitionId
+        id: exhibition_id,
       },
-      limit: 1
-    }
+      limit: 1,
+    };
 
     Exhibition.destroy(options)
       .then(() => res.status(204).json({
-        data: "success"
+        data: "success",
       }))
-      .catch((err: Error) => res.status(500).json(err))
+      .catch((err: Error) => res.status(500).json(err));
   }
 }

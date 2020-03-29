@@ -1,5 +1,5 @@
 import {
-  Sequelize
+  Sequelize,
 } from "sequelize";
 import dotenv from "dotenv";
 
@@ -14,5 +14,5 @@ const db = new Sequelize({
 });
 
 export {
-  db
-}
+  db,
+};
