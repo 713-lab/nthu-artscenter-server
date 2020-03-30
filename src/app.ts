@@ -40,7 +40,7 @@ app.use(session({
   cookie: { secure: process.env.isHTTPS === 'true' || false, maxAge: 600 * 1000 },
 }));
 
-//app.use(morgan('combined'));
+// app.use(morgan('combined'));
 morganBody(app);
 
 app.use(express.static(path.join(__dirname, "../public")));

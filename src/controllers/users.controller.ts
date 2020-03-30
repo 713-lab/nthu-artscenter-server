@@ -10,7 +10,7 @@ export class UsersController {
   public async register(req: Request, res: Response) {
     try {
       // tslint:disable-next-line:no-console
-      //console.log(req.body);
+      // console.log(req.body);
       const userData = await User.create({
         email: req.body.email,
         password: req.body.password,
@@ -101,7 +101,7 @@ export class UsersController {
     try {
       if(req.session.isLogin){
         // tslint:disable-next-line:no-console
-        //console.log(req.session);
+        // console.log(req.session);
         next();
       }
       else{

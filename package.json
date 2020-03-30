@@ -14,7 +14,9 @@
     "beforetest": "node test/initialize.js",
     "test": "jest --forceExit --coverage --verbose",
     "jest": "jest",
-    "docs": "typedoc --out docs src"
+    "docs": "typedoc --out docs src",
+    "createuser": "node test/create_user.js",
+    "cleanuser": "node test/clean_user.js"
   },
   "author": "YC & CH",
   "license": "ISC",

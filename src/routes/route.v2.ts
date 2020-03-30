@@ -29,7 +29,7 @@ app
 
 app
   .route("/register")
-  .post(usersController.register);
+  .post(usersController.isAuth, usersController.register);
 app
   .route("/exhibitions")
   .get(exhibitionsController.index)

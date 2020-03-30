@@ -26,7 +26,7 @@ const initialize = async () => {
       force: true
     });
     const user = await User.create(testUser1)
-    console.log(`create user id=${user.id}`);
+    console.log(`create user email=${user.email}`);
     //exhibition 1
     const exhibition1 = await Exhibition.create(testExhibition1);
     const exhibition2 = await Exhibition.create(testExhibition2);
