@@ -6,3 +6,4 @@ dist/
 .env.prod
 .env.stage
 coverage/
+data/

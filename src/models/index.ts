@@ -29,9 +29,9 @@ export const loadModels = async () => {
     // Media should create behind Exhibition and Publication
     await Media.sync({alter: true});
     // tslint:disable-next-line:no-console
-    db.sync({alter: true});
+    await db.sync({alter: true});
   }catch(err) {
     // tslint:disable-next-line:no-console
-    console.log(err);
+    throw new Error("Failed to initial database");
   }
 }

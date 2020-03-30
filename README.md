@@ -1,5 +1,9 @@
 # NTHU ArtsCenter Server
 [![Build Status](https://travis-ci.com/713-lab/nthu-artscenter-server.svg?branch=master)](https://travis-ci.com/713-lab/nthu-artscenter-server)
+![](https://img.shields.io/github/license/713-lab/nthu-artscenter-server)
+![](https://img.shields.io/github/last-commit/713-lab/nthu-artscenter-server)
+[![](https://img.shields.io/badge/docker-latest-blue)](https://hub.docker.com/r/chiahsin0227/nthu_artscenter_server)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 ## Dependencies
 - Typescript
@@ -35,9 +39,11 @@ sudo psql -c "ALTER USER testuser WITH SUPERUSER;" -U postgres
 DB_NAME: testuser
 DB_USERNAME: testuser
 DB_PASSWORD: testuser
+DB_HOST: localhost
 DB_PORT: 5432
 SERVER_URL: http://localhost:8090
 SERVER_PORT: 8090
+
 ```
 - Build and Run the server
 ```
@@ -46,6 +52,7 @@ npm start
 ```
 - Test the server
 ```
+npm run beforetest
 npm run test
 ```
 - Run test server

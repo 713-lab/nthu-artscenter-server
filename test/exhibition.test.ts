@@ -14,23 +14,9 @@ import {
   testMedia2,
   testMedia3,
   testMedia4
-} from './data';
+} from '../script/data';
 
 const server = request(app);
-
-beforeAll((done) => {
-  loadModels()
-  .then(() => {
-    done()
-  })
-})
-
-afterAll((done) => {
-  db.close()
-  .then(() => {
-    done()
-  })
-})
 
 describe("GET /api/v2/exhibitions", () => {
     test("should return 200 OK", async () => {
