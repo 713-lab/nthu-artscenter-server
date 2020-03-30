@@ -10,6 +10,8 @@ COPY ./tslint.json /server
 RUN npm install
 
 COPY ./src /server/src
+COPY ./test /server/test
+COPY ./script /server/script
 
 RUN npm run build
 

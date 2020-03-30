@@ -6,24 +6,19 @@ import { User } from "./models/User";
 import { Information } from "./models/Information";
 import { loadModels } from "./models";
 
+const server = app.listen(app.get("port"));
+// tslint:disable-next-line:no-console
+console.log(`Server starts on port ${app.get("port")}`);
 
-
-app.listen(app.get("port"), async () => {
-  try {
-    /*
-    await User.sync({alter: true});
-    await Exhibition.sync({alter: true});
-    await Publication.sync({alter: true});
-    await Information.sync({alter: true});
-    // Media should create behind Exhibition and Publication
-    await Media.sync({alter: true});
-    */
-    await loadModels();
+loadModels()
+  .then(() => {
     // tslint:disable-next-line:no-console
-    console.log( `server started at http://localhost:${ app.get("port") }` );
-  } catch(err) {
+    console.log("Database load success");
+  })
+  .catch((err) => {
     // tslint:disable-next-line:no-console
     console.log(err);
-  }
+    server.close();
+    process.exit(1);
+  });
 
-});

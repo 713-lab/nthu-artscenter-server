@@ -9,20 +9,6 @@ const server = request(app);
 // tslint:disable-next-line:no-console
 //console.log(`${process.env.DB_NAME}\n${process.env.DB_USERNAME}\n${process.env.DB_PASSWORD}\n${process.env.SERVER_PORT}`)
 
-beforeAll((done) => {
-  loadModels()
-  .then(() => {
-    done()
-  })
-})
-
-afterAll((done) => {
-  db.close()
-  .then(() => {
-    done()
-  })
-})
-
 describe("POST /api/v2/login", () => {
   test("should return 'Require email or password'", (done) => {
     server.post("/api/v2/login")

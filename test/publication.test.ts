@@ -9,26 +9,12 @@ import {
   testPublication1,
   testMedia1,
   testMedia2
- } from "./data";
+ } from "../script/data";
 
 const server = request(app);
 
 // tslint:disable-next-line:no-console
 //console.log(`${process.env.DB_NAME}\n${process.env.DB_USERNAME}\n${process.env.DB_PASSWORD}\n${process.env.SERVER_PORT}`)
-
-beforeAll((done) => {
-  loadModels()
-  .then(() => {
-    done()
-  })
-})
-
-afterAll((done) => {
-  db.close()
-  .then(() => {
-    done()
-  })
-})
 
 describe("GET /api/v2/publications", () => {
   test("should return 200 OK", async () => {
