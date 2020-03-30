@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from "dotenv";
 import routeV2 from './routes/route.v2';
-// import morgan from 'morgan';
+import morgan from 'morgan';
 import morganBody from 'morgan-body';
 import path from 'path';
 
@@ -40,7 +40,7 @@ app.use(session({
   cookie: { secure: process.env.isHTTPS === 'true' || false, maxAge: 600 * 1000 },
 }));
 
-// app.use(morgan('combined'));
+//app.use(morgan('combined'));
 morganBody(app);
 
 app.use(express.static(path.join(__dirname, "../public")));

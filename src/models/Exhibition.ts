@@ -26,6 +26,8 @@ class Exhibition extends Model {
   public en_location!: string;
   public en_ticket_info!: string;
 
+  public isActive!: boolean;
+
   public cover_id!: number;
   public cover!: any;
   public media!: any;
@@ -49,6 +51,7 @@ interface ExhibitionInterface {
   daily_end_time: Date;
   ticket_info: string;
   registration_link: string;
+
   en_title: string;
   en_subtitle: string;
   en_description: string;
@@ -56,6 +59,9 @@ interface ExhibitionInterface {
   en_performer: string;
   en_location: string;
   en_ticket_info: string;
+
+  isActive: boolean;
+
   cover_id: number;
   cover: any;
   media: any;
@@ -94,6 +100,11 @@ Exhibition.init({
   en_performer: DataTypes.STRING,
   en_location: DataTypes.STRING,
   en_ticket_info: DataTypes.STRING,
+
+  isActive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
 
   }, 
   {

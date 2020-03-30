@@ -3,15 +3,6 @@ import app from "../src/app";
 import { db } from "../src/config/database"
 import { doesNotMatch } from "assert";
 
-beforeAll(async (done) => {
-  await db.sync({alter: true});
-  done();
-});
-
-afterAll(async () => {
-  await db.close();
-})
-
 describe("Test Sequelize", () => {
   test("should OK", (done) => {
     db.authenticate()

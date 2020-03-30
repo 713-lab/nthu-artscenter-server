@@ -31,6 +31,7 @@ interface InformationInterface {
     cover: any;
     media: any;
     cover_id: number;
+
 }
 
 Information.init({

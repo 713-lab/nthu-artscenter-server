@@ -10,8 +10,8 @@ export class BannersController {
 
   /**
    * Return Banner list
-   * 
-   * 
+   *
+   *
    * @return {Banners[] | null}
    */
   public async index(req: Request, res: Response) {

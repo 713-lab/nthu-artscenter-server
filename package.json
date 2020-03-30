@@ -11,7 +11,9 @@
     "dev:start": "npm-run-all build start",
     "start": "node dist/server.js",
     "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
+    "beforetest": "node test/initialize.js",
     "test": "jest --forceExit --coverage --verbose",
+    "jest": "jest",
     "docs": "typedoc --out docs src"
   },
   "author": "YC & CH",

@@ -16,6 +16,8 @@ class Banner extends Model {
   public cover_mobile_id!: number;
   public cover_mobile!: any;
 
+  public isActive!: boolean;
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -27,6 +29,8 @@ interface BannerInterface {
   exhibition_id: number;
   cover_id: number;
   cover_mobile_id: number;
+
+  isActive: boolean;
 }
 
 Banner.init({
@@ -37,6 +41,10 @@ Banner.init({
   },
   title: DataTypes.STRING,
   subtitle: DataTypes.STRING,
+  isActive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
   
 }, {
   sequelize: db,

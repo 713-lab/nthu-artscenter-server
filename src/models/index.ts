@@ -6,8 +6,21 @@ import { Exhibition } from "./Exhibition";
 import { Publication } from "./Publication";
 import { Banner } from "./Banner";
 
+/*
+db.import('user', require('./User'));
+db.import('media', require('./Media'));
+db.import('exhibition', require('./Exhibition'));
+db.import('publication', require('./Publication'));
+db.import('information', require('./Information'));
+db.import('banner', require('./Banner'));
+*/
+
+
+
+
 export const loadModels = async () => {
   try {
+    
     await User.sync({alter: true});
     await Exhibition.sync({alter: true});
     await Publication.sync({alter: true});
@@ -16,6 +29,7 @@ export const loadModels = async () => {
     // Media should create behind Exhibition and Publication
     await Media.sync({alter: true});
     // tslint:disable-next-line:no-console
+    db.sync({alter: true});
   }catch(err) {
     // tslint:disable-next-line:no-console
     console.log(err);
