@@ -11,8 +11,12 @@
     "dev:start": "npm-run-all build start",
     "start": "node dist/server.js",
     "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
+    "beforetest": "node test/initialize.js",
     "test": "jest --forceExit --coverage --verbose",
-    "docs": "typedoc --out docs src"
+    "jest": "jest",
+    "docs": "typedoc --out docs src",
+    "createuser": "node test/create_user.js",
+    "cleanuser": "node test/clean_user.js"
   },
   "author": "YC & CH",
   "license": "ISC",

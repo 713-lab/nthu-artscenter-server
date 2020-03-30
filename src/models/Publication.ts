@@ -22,6 +22,7 @@ class Publication extends Model {
   public en_spec!: string;
 
   public cover!: any;
+  public isActive!: boolean;
 
 }
 
@@ -45,6 +46,7 @@ interface PublicationInterface {
     en_spec: string;
   
     cover: any;
+    isActive: boolean;
 }
 
 Publication.init({
@@ -72,6 +74,11 @@ Publication.init({
   en_author: DataTypes.STRING,
   en_publisher: DataTypes.STRING,
   en_spec: DataTypes.STRING,
+
+  isActive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
 
   }, 
   {

@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from "dotenv";
 import routeV2 from './routes/route.v2';
-// import morgan from 'morgan';
+import morgan from 'morgan';
 import morganBody from 'morgan-body';
 import path from 'path';
 

@@ -9,18 +9,18 @@ const server = request(app);
 // tslint:disable-next-line:no-console
 //console.log(`${process.env.DB_NAME}\n${process.env.DB_USERNAME}\n${process.env.DB_PASSWORD}\n${process.env.SERVER_PORT}`)
 
-beforeAll(async (done) => {
-  await loadModels();
-  await User.create({
-    email: "test1@gmail.com",
-    password: "admintest1",
-    name: "test1",
+beforeAll((done) => {
+  loadModels()
+  .then(() => {
+    done()
   })
-  done();
-});
+})
 
-afterAll(async () => {
-  await db.close();
+afterAll((done) => {
+  db.close()
+  .then(() => {
+    done()
+  })
 })
 
 describe("POST /api/v2/login", () => {

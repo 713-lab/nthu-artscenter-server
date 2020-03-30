@@ -24,4 +24,5 @@ script:
   - npm run build
   - psql -c '\d' -U postgres -d artscenter
   - psql -c '\du;' -U postgres
+  - npm run beforetest
   - npm run test

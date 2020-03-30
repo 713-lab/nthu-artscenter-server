@@ -23,6 +23,7 @@ class User extends Model {
   public email!: string;
   public password!: string;
   public isAdmin!: boolean;
+  public isActive!: boolean;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -34,6 +35,7 @@ interface UserInterface {
   email: string;
   password: string;
   isAdmin: boolean;
+  isActive: boolean;
 }
 
 User.init({
@@ -45,6 +47,7 @@ User.init({
   email: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true
   },
   password: {
     type: DataTypes.STRING,
@@ -54,6 +57,10 @@ User.init({
     type: DataTypes.STRING,
   },
   isAdmin: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   }

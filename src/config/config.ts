@@ -5,6 +5,6 @@ dotenv.config({
 });
 
 // tslint:disable-next-line:no-console
-console.log(process.env);
+// console.log(process.env);
 
 export const UPLOAD_DIR = process.env.SERVER_URL + '/static/uploads';

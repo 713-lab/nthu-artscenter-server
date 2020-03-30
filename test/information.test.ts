@@ -5,57 +5,29 @@ import { db } from "../src/config/database";
 import { User } from "../src/models/User";
 import { Information } from "../src/models/Information";
 import { Media } from "../src/models/Media";
-
+import { 
+  testUser1,
+  testInformation1,
+  testMedia1,
+  testMedia2
+ } from "./data";
 const server = request(app);
 
 // tslint:disable-next-line:no-console
 //console.log(`${process.env.DB_NAME}\n${process.env.DB_USERNAME}\n${process.env.DB_PASSWORD}\n${process.env.SERVER_PORT}`)
 
-let testInformationId: number;
-const testInformation1: any = {
-  title: "test information 1",
-  description: "test information 1 description",
-  start_date: "2019-01-02",
-  isActive: "true"
-}
+beforeAll((done) => {
+  loadModels()
+  .then(() => {
+    done()
+  })
+})
 
-const testMedia1 = {
-  file: "1.jpg",
-  note: "test 1.jpg",
-  semester: "201902",
-}
-
-const testMedia2 = {
-  file: "2.jpg",
-  note: "test 2.jpg",
-  semester: "201902",
-}
-
-beforeAll(async (done) => {
-  try {
-    await loadModels();
-    await User.create({
-      email: "test1@gmail.com",
-      password: "admintest1",
-      name: "test1",
-    });  
-    const information = await Information.create(testInformation1);
-    testMedia1['information_id'] = information.id;
-    testMedia2['information_id'] = information.id;
-    testInformationId = information.id;
-    await Media.create(testMedia1);
-    await Media.create(testMedia2);
-    done();
-  }catch(err){
-    // tslint:disable-next-line:no-console
-    console.log(err)
-  }
-  
-
-});
-
-afterAll(async () => {
-  await db.close();
+afterAll((done) => {
+  db.close()
+  .then(() => {
+    done()
+  })
 })
 
 describe("GET /api/v2/informations", () => {
@@ -69,9 +41,9 @@ describe("GET /api/v2/informations", () => {
 
 describe("GET /api/v2/informations/:id", () => {
   test("should return 200 OK", async () => {
-    const res = await server.get(`/api/v2/informations/${testInformationId}`)
+    const res = await server.get(`/api/v2/informations/${testInformation1.id}`)
           .expect(200)
-    expect(res.body.id).toBe(testInformationId);
+    expect(res.body.id).toBe(testInformation1.id);
     expect(res.body.title).toBe(testInformation1.title);
     expect(res.body.description).toBe(testInformation1.description);
     expect(res.body.start_date).toBe(testInformation1.start_date);
@@ -81,15 +53,12 @@ describe("GET /api/v2/informations/:id", () => {
 describe("PUT /api/v2/informations/:id", () => {
   test("should return 202 OK", async () => {
     const response = await server.post("/api/v2/login")
-      .send({
-        email: "test1@gmail.com",
-        password: "admintest1"
-      })
+      .send(testUser1)
       .set('Content-Type', 'application/json')
       .set('Accept', 'application/json')
 
     const session = response.header['set-cookie'];
-    return await server.put(`/api/v2/informations/${testInformationId}`)
+    return await server.put(`/api/v2/informations/${testInformation1.id}`)
           .set("Cookie", session)
           .send({
             title: "change test1 title"
@@ -101,15 +70,12 @@ describe("PUT /api/v2/informations/:id", () => {
 describe("DELETE /api/v2/informations/:id", () => {
   test("should return 200 OK", async () => {
     const response = await server.post("/api/v2/login")
-      .send({
-        email: "test1@gmail.com",
-        password: "admintest1"
-      })
+      .send(testUser1)
       .set('Content-Type', 'application/json')
       .set('Accept', 'application/json')
 
     const session = response.header['set-cookie'];
-    return await server.delete(`/api/v2/informations/${testInformationId}`)
+    return await server.delete(`/api/v2/informations/${testInformation1.id}`)
           .set("Cookie", session)
           .expect(204)
 
