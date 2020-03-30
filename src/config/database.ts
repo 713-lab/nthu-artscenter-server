@@ -10,6 +10,7 @@ const db = new Sequelize({
   database: process.env.DB_NAME || "artscenter",
   username: process.env.DB_USERNAME || "testuser",
   password: process.env.DB_PASSWORD || "testuser",
+  port: parseInt(process.env.DB_PORT, 10) || 5432,
   dialect: "postgres",
   logging: false,
 });

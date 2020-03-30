@@ -1,8 +1,5 @@
 FROM node:12.16-alpine3.9
 
-WORKDIR /server/src
-
-COPY ./src /server/src
 
 WORKDIR /server
 
@@ -11,6 +8,8 @@ COPY ./tsconfig.json /server
 COPY ./tslint.json /server
 
 RUN npm install
+
+COPY ./src /server/src
 
 RUN npm run build
 
