@@ -7,6 +7,7 @@ const {
 const { Exhibition } = require('../dist/models/Exhibition');
 const { Media } = require('../dist/models/Media');
 const { Information } = require('../dist/models/Information');
+const { Publication } = require('../dist/models/Publication');
 
 const {
   testUser1,
@@ -14,6 +15,7 @@ const {
   testExhibition2,
   testExhibition3,
   testInformation1,
+  testPublication1,
   testMedia1,
   testMedia2,
   testMedia3,
@@ -33,6 +35,8 @@ const initialize = async () => {
     const exhibition3 = await Exhibition.create(testExhibition3);
 
     const information1 = await Information.create(testInformation1);
+
+    const publication1 = await Publication.create(testPublication1);
     
     await Media.create(testMedia1);
     await Media.create(testMedia2);
