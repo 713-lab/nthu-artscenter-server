@@ -16,7 +16,6 @@ class Media extends Model {
 
   public exhibition_id!: number;
   public publication_id!: number;
-  public information_id!: number;
 
   public src!: string;
   public src_cover!: string;
@@ -33,7 +32,6 @@ interface MediaInterface {
   semester: Date;
   exhibition_id: number;
   publication_id: number;
-  information_id: number;
   src: string;
   src_cover: string;
   src_thumb: string;

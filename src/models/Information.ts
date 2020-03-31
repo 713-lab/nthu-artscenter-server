@@ -13,7 +13,6 @@ class Information extends Model {
   public en_description!: string;
 
   public cover!: any;
-  public media!: any;
   public cover_id!: number;
 
 }
@@ -29,7 +28,6 @@ interface InformationInterface {
     en_description: string;
   
     cover: any;
-    media: any;
     cover_id: number;
 
 }
@@ -61,11 +59,6 @@ Information.init({
     tableName: 'information',
   },
 );
-
-Information.hasMany(Media, {
-  sourceKey: "id",
-  foreignKey: "information_id"
-});
 
 Information.belongsTo(Media, {
   as: 'cover',

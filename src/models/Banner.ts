@@ -7,6 +7,7 @@ class Banner extends Model {
   public id!: number;
   public title!: string;
   public subtitle!: string;
+  public link!: string;
 
   public exhibition_id!: number;
   public exhibition!: any;
@@ -26,6 +27,7 @@ interface BannerInterface {
   id: number;
   title: string;
   subtitle: string;
+  link: string;
   exhibition_id: number;
   cover_id: number;
   cover_mobile_id: number;
@@ -51,7 +53,8 @@ Banner.init({
   cover_id: {
     allowNull: false,
     type: DataTypes.INTEGER
-  }
+  },
+  link: DataTypes.STRING
   
 }, {
   sequelize: db,

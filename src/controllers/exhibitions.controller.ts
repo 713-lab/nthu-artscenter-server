@@ -1,44 +1,46 @@
-import { Request, Response } from 'express';
-import { Exhibition, ExhibitionInterface } from '../models/Exhibition';
-import { UpdateOptions, DestroyOptions } from 'sequelize';
-import { Media } from '../models/Media';
-import { UPLOAD_DIR } from '../config/config';
-
+import {
+  Request,
+  Response,
+} from 'express';
+import {
+  Exhibition,
+  ExhibitionInterface,
+} from '../models/Exhibition';
+import {
+  UpdateOptions,
+  DestroyOptions,
+} from 'sequelize';
+import {
+  Media,
+} from '../models/Media';
 
 export class ExhibitionsController {
 
-  public async index(req: Request, res: Response) {
+  public index = async (req: Request, res: Response) => {
     try {
       const typeOfArt = req.query.typeOfArt;
       const year = req.query.year;
       const searchStr = req.query.searchStr;
-      if(!typeOfArt && !year  && !searchStr){
-        const exhibitions = await Exhibition.findAll < Exhibition > ({
+      let exhibitions: Exhibition[];
+      if (!typeOfArt && !year && !searchStr) {
+        exhibitions = await Exhibition.findAll < Exhibition > ({
           limit: req.query.limit || 12,
           offset: req.query.offset || 0,
-          order: ['id'],
+          order: [
+            ['start_date', 'DESC'],
+          ],
         });
-        for(const exhibition of exhibitions){
-          const medias = await Media.findAll({
-            where: {
-              exhibition_id:  exhibition.id,
-            },
-          });
-          exhibition.setDataValue('media', medias);
-        }
-        res.json(exhibitions);
-      }
-      else{
-        let exhibitions = await Exhibition.findAll < Exhibition > ({});
-        if(typeOfArt){
+      } else {
+        exhibitions = await Exhibition.findAll < Exhibition > ({});
+        if (typeOfArt) {
           exhibitions = exhibitions.filter((item) => {
             return item.type === typeOfArt;
           });
         }
-        if(year){
+        if (year) {
           exhibitions = exhibitions.filter((item) => {
             // not finish yet
-            const startDate: Date= new Date(item.start_date);
+            const startDate: Date = new Date(item.start_date);
             const lowBound: Date = new Date();
             const upBound: Date = new Date();
             lowBound.setFullYear(year, 0, 1);
@@ -46,72 +48,70 @@ export class ExhibitionsController {
             return lowBound.getTime() < startDate.getTime() && upBound.getTime() > startDate.getTime();
           });
         }
-        if(searchStr){
+        if (searchStr) {
           exhibitions = exhibitions.filter((item) => {
             const patt = new RegExp(searchStr);
             return patt.test(item.title) || patt.test(item.performer);
           });
         }
-        for(const exhibition of exhibitions){
-          const medias = await Media.findAll({
-            where: {
-              exhibition_id:  exhibition.id,
-            },
-          });
-          exhibition.setDataValue('media', medias);
-        }
-        res.json(exhibitions);
       }
-    }catch(err){
-      res.status(500).json(err);
-    }
-  }
 
-  public create(req: Request, res: Response) {
-    const params: ExhibitionInterface = req.body;
-
-    Exhibition.create < Exhibition > (params)
-      .then((exhibition: Exhibition) => res.status(201).json(exhibition))
-      .catch((err: Error) => res.status(500).json(err));
-  }
-
-  public async show(req: Request, res: Response) {
-    try {
-      const exhibition_id: string = req.params.id;
-      const exhibition: Exhibition | null = await Exhibition.findByPk < Exhibition > (exhibition_id);
-      // tslint:disable-next-line:no-console
-      if (exhibition) {
+      for (const exhibition of exhibitions) {
         if(exhibition.cover_id){
-          const cover = await Media.findByPk(exhibition.cover_id);
-          // tslint:disable-next-line:no-console
-          console.log(cover);
-          cover.setDataValue('src', UPLOAD_DIR + '/' + cover.semester + '/' + cover.file);
-          cover.setDataValue('src_cover', UPLOAD_DIR + '/' + cover.semester + '/cover_' + cover.file);
-          cover.setDataValue('src_thumb', UPLOAD_DIR + '/' + cover.semester + '/thumb_' + cover.file);
-          exhibition.setDataValue('cover', cover);
+          const cover: Media | null = await Media.findByPk(exhibition.cover_id);
+          if(cover) { exhibition.setDataValue('cover', cover);}
         }
         const medias = await Media.findAll({
           where: {
             exhibition_id: exhibition.id,
           },
         });
-        for(const media of medias) {
-          media.setDataValue('src', UPLOAD_DIR + '/' + media.semester + '/' + media.file);
-          media.setDataValue('src_cover', UPLOAD_DIR + '/' + media.semester + '/cover_' + media.file);
-          media.setDataValue('src_thumb', UPLOAD_DIR + '/' + media.semester + '/thumb_' + media.file);
-        }
         exhibition.setDataValue('media', medias);
-        return res.json(exhibition);
       }
-      else { res.status(404); }
-
-
-    } catch(err) {
-      return res.status(500).json(err);
+      res.json(exhibitions);
+    } catch (err) {
+      res.status(500).json(err);
     }
   }
 
-  public async update(req: Request, res: Response) {
+  public create = async (req: Request, res: Response) => {
+    try {
+      const params: ExhibitionInterface = req.body;
+      const exhibition = await Exhibition.create < Exhibition > (params);
+      res.status(201).json(exhibition);
+    } catch (err) {
+      // tslint:disable-next-line:no-console
+      console.log(err);
+      res.status(500).json("create exhibition error");
+    }
+  }
+
+  public show = async (req: Request, res: Response) => {
+    try {
+      const exhibition_id: string = req.params.id;
+      const exhibition: Exhibition | null = await Exhibition.findByPk < Exhibition > (exhibition_id);
+      if(!exhibition){ throw Error(`not found exhibitionId=${req.params.id}`);}
+      if (exhibition) {
+        if (exhibition.cover_id) {
+          const cover: Media | null = await Media.findByPk(exhibition.cover_id);
+          if(cover) { exhibition.setDataValue('cover', cover);}
+        }
+        const medias = await Media.findAll({
+          where: {
+            exhibition_id: exhibition.id,
+          },
+        });
+        exhibition.setDataValue('media', medias);
+      }
+      res.status(201).json(exhibition);
+    } catch (err) {
+      return res.status(500).json({
+        message: err.message,
+      });
+    }
+  }
+
+  public update = async (req: Request, res: Response) => {
     try {
       const exhibition_id: string = req.params.id;
       const params: ExhibitionInterface = req.body;
@@ -125,27 +125,32 @@ export class ExhibitionsController {
 
       await Exhibition.update(params, options);
       res.status(202).json({
-        data: "success",
+        message: `update exhibitionId=${req.params.id} success`,
       });
-    }catch(err){
-      res.status(500).json(err);
+    } catch (err) {
+      res.status(500).json({
+        message: `update exhibitionId=${req.params.id} error`,
+      });
     }
 
   }
 
-  public delete(req: Request, res: Response) {
-    const exhibition_id: string = req.params.id;
-    const options: DestroyOptions = {
-      where: {
-        id: exhibition_id,
-      },
-      limit: 1,
-    };
+  public delete = async (req: Request, res: Response) => {
+    try {
+      const exhibition_id: string = req.params.id;
+      const options: DestroyOptions = {
+        where: {
+          id: exhibition_id,
+        },
+        limit: 1,
+      };
 
-    Exhibition.destroy(options)
-      .then(() => res.status(204).json({
-        data: "success",
-      }))
-      .catch((err: Error) => res.status(500).json(err));
+      await Exhibition.destroy(options);
+      res.status(204).json({});
+    }catch(err) {
+      res.status(500).json({
+        messages: `delete exhibitionId=${req.params.id} error`,
+      });
+    }
   }
 }
