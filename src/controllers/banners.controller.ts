@@ -134,7 +134,7 @@ export class BannersController {
       });
     }catch(err) {
       res.status(500).send({
-        "messages": `delete bannerID=${req.params.id}`
+        "messages": `delete bannerID=${req.params.id}`,
       });
     }
 
