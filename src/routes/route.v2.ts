@@ -21,24 +21,24 @@ const bannersController = new BannersController();
 app
   .route("/login")
   .get(usersController.getLogin)
-  .post(usersController.login);
+  .post(upload.none(), usersController.login);
 
 app
   .route("/logout")
-  .get(usersController.logout);
+  .get(usersController.isAuth, usersController.logout);
 
 app
   .route("/register")
-  .post(usersController.isAuth, usersController.register);
+  .post(usersController.isAuth, upload.none(), usersController.register);
 app
   .route("/exhibitions")
   .get(exhibitionsController.index)
-  .post(usersController.isAuth, exhibitionsController.create);
+  .post(usersController.isAuth, upload.none(), exhibitionsController.create);
 
 app
   .route("/exhibitions/:id")
   .get(exhibitionsController.show)
-  .put(usersController.isAuth, exhibitionsController.update)
+  .put(usersController.isAuth, upload.none(), exhibitionsController.update)
   .delete(usersController.isAuth, exhibitionsController.delete);
 
 // Media
@@ -50,42 +50,42 @@ app
 app
   .route("/medias/:id")
   .get(mediasController.show)
-  .put(usersController.isAuth, mediasController.update)
+  .put(usersController.isAuth, upload.none(), mediasController.update)
   .delete(usersController.isAuth, mediasController.delete);
 
 // Publication
 app
   .route("/publications")
   .get(publicationsController.index)
-  .post(usersController.isAuth, publicationsController.create);
+  .post(usersController.isAuth, upload.none(), publicationsController.create);
 
 app
   .route("/publications/:id")
   .get(publicationsController.show)
-  .put(publicationsController.update)
-  .delete(publicationsController.delete);
+  .put(usersController.isAuth, upload.none(), publicationsController.update)
+  .delete(usersController.isAuth, publicationsController.delete);
 
 app
   .route("/informations")
   .get(informationsController.index)
-  .post(usersController.isAuth, informationsController.create);
+  .post(usersController.isAuth, upload.none(), informationsController.create);
 
 app
   .route("/informations/:id")
   .get(informationsController.show)
-  .put(usersController.isAuth, informationsController.update)
+  .put(usersController.isAuth, upload.none(), informationsController.update)
   .delete(usersController.isAuth, informationsController.delete);
 
 // Banner
 app
   .route("/banners")
   .get(bannersController.index)
-  .post(usersController.isAuth, bannersController.create);
+  .post(usersController.isAuth, upload.none(), bannersController.create);
 
 app
   .route("/banners/:id")
   .get(bannersController.show)
-  .put(usersController.isAuth, bannersController.update)
+  .put(usersController.isAuth, upload.none(), bannersController.update)
   .delete(usersController.isAuth, bannersController.delete);
 
 export default app;
