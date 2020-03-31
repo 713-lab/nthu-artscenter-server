@@ -22,7 +22,7 @@ export class InformationsController {
         }
 
       }
-      res.status(201).json(informations);
+      res.status(200).json(informations);
     }catch(err) {
       // tslint:disable-next-line:no-console
       console.log(err);

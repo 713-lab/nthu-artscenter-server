@@ -16,7 +16,7 @@ export class PublicationsController {
           publication.setDataValue('cover', cover);
         }
       }
-      res.status(201).json(publications);
+      res.status(200).json(publications);
     }catch(err) {
       // tslint:disable-next-line:no-console
       console.log(err);
@@ -53,7 +53,7 @@ export class PublicationsController {
           publication.setDataValue('cover', cover);
         }
       }
-      res.status(201).json(publication);
+      res.status(200).json(publication);
     } catch(err) {
       // tslint:disable-next-line:no-console
       console.log(err);
