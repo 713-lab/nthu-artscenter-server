@@ -1,8 +1,21 @@
-import { Request, Response } from 'express';
-import { Banner, BannerInterface } from '../models/Banner';
-import { UpdateOptions, DestroyOptions } from 'sequelize';
-import { Media } from '../models/Media';
-import { Exhibition } from '../models/Exhibition';
+import {
+  Request,
+  Response,
+} from 'express';
+import {
+  Banner,
+  BannerInterface,
+} from '../models/Banner';
+import {
+  UpdateOptions,
+  DestroyOptions,
+} from 'sequelize';
+import {
+  Media,
+} from '../models/Media';
+import {
+  Exhibition,
+} from '../models/Exhibition';
 
 
 
@@ -14,97 +27,151 @@ export class BannersController {
    *
    * @return {Banners[] | null}
    */
-  public async index(req: Request, res: Response) {
+  public index = async (_req: Request, res: Response) => {
     try {
       const banners: Banner[] | null = await Banner.findAll < Banner > ({});
-      if(!banners){ return res.status(201).json({});}
-      for(const banner of banners) {
-        // tslint:disable-next-line:no-console
-        // console.log(banner);
-        if(banner.cover_id){
+      if (!banners) {
+        res.status(201).json();
+      }
+      for (const banner of banners) {
+        if (banner.cover_id) {
           const cover: Media | null = await Media.findByPk(banner.cover_id);
-          if(cover){ banner.setDataValue('cover', cover);}
+          if (cover) {
+            banner.setDataValue('cover', cover);
+          }
         }
-        if(banner.cover_mobile_id){
-          const coverMobile: Media = await Media.findByPk(banner.cover_mobile_id);
-          if(coverMobile){ banner.setDataValue('cover_mobile', coverMobile);}
+        if (banner.cover_mobile_id) {
+          const coverMobile: Media | null = await Media.findByPk(banner.cover_mobile_id);
+          if (coverMobile) {
+            banner.setDataValue('cover_mobile', coverMobile);
+          }
         }
-        if(banner.exhibition_id){
-          const exhibition: Exhibition = await Exhibition.findByPk(banner.exhibition_id);
-          if(exhibition){ banner.setDataValue('exhibition', exhibition);}
+        if (banner.exhibition_id) {
+          const exhibition: Exhibition | null = await Exhibition.findByPk(banner.exhibition_id);
+          if (exhibition) {
+            banner.setDataValue('exhibition', exhibition);
+          }
         }
-        // tslint:disable-next-line:no-console
-        console.log(banner);
       }
       res.status(201).json(banners);
-    }catch(err) {
-      res.status(500).json(err);
+    } catch (err) {
+      // tslint:disable-next-line:no-console
+      console.log(err);
+      res.status(500).send({
+        messages: "index banners error",
+      });
     }
   }
 
-  public create(req: Request, res: Response) {
-    const params: BannerInterface = req.body;
+  public create = async (req: Request, res: Response): Promise < Banner | void > => {
+    try {
+      const params: BannerInterface = req.body;
+      const banner: Banner | null = await Banner.create < Banner > (params);
 
-    Banner.create < Banner > (params)
-      .then((banner: Banner) => res.status(201).json(banner))
-      .catch((err: Error) => res.status(500).json(err));
+      if (banner.cover_id) {
+        const cover: Media | null = await Media.findByPk(banner.cover_id);
+        if (cover) {
+          banner.setDataValue('cover', cover);
+        }
+      }
+      if (banner.cover_mobile_id) {
+        const coverMobile: Media | null = await Media.findByPk(banner.cover_mobile_id);
+        if (coverMobile) {
+          banner.setDataValue('cover_mobile', coverMobile);
+        }
+      }
+      if (banner.exhibition_id) {
+        const exhibition: Exhibition | null = await Exhibition.findByPk(banner.exhibition_id);
+        if (exhibition) {
+          banner.setDataValue('exhibition', exhibition);
+        }
+      }
+      res.status(201).json(banner);
+    } catch (err) {
+      res.status(500).send({
+        "message": "create banner error",
+      });
+    }
   }
 
-  public async show(req: Request, res: Response) {
+  public show = async (req: Request, res: Response) => {
     try {
       const banner_id: string = req.params.id;
       const banner: Banner | null = await Banner.findByPk < Banner > (banner_id);
-      // tslint:disable-next-line:no-console
-      if (banner) {
-        if(banner.cover_id){
-          const cover = await Media.findByPk(banner.cover_id);
-          const coverMobile = await Media.findByPk(banner.cover_mobile_id);
-          // tslint:disable-next-line:no-console
-          console.log(cover);
+
+      if (!banner) {
+        throw Error(`BannerId=${banner_id} not found`);
+      }
+
+      if (banner.cover_id) {
+        const cover: Media | null = await Media.findByPk(banner.cover_id);
+        if (cover) {
           banner.setDataValue('cover', cover);
+        }
+      }
+      if (banner.cover_mobile_id) {
+        const coverMobile: Media | null = await Media.findByPk(banner.cover_mobile_id);
+        if (coverMobile) {
           banner.setDataValue('cover_mobile', coverMobile);
         }
-        return res.json(banner);
       }
-      else { res.status(404); }
-
-
-    } catch(err) {
-      return res.status(500).json(err);
+      if (banner.exhibition_id) {
+        const exhibition: Exhibition | null = await Exhibition.findByPk(banner.exhibition_id);
+        if (exhibition) {
+          banner.setDataValue('exhibition', exhibition);
+        }
+      }
+      res.status(201).json(banner);
+    } catch (err) {
+      res.status(500).send({
+        messages: err.message,
+      });
     }
   }
 
-  public update(req: Request, res: Response) {
-    const banner_id: string = req.params.id;
-    const params: BannerInterface = req.body;
+  public update = async (req: Request, res: Response) => {
+    try {
+      const banner_id: string = req.params.id;
+      const params: BannerInterface = req.body;
 
-    const options: UpdateOptions = {
-      where: {
-        id: banner_id,
-      },
-      limit: 1,
-    };
+      const options: UpdateOptions = {
+        where: {
+          id: banner_id,
+        },
+        limit: 1,
+      };
 
-    Banner.update(params, options)
-      .then(() => res.status(202).json({
-        message: "success",
-      }))
-      .catch((err: Error) => res.status(500).json(err));
+      await Banner.update(params, options);
+      res.status(201).send({
+        messages: `update bannerId=${banner_id} success`,
+      });
+    } catch (err) {
+      res.status(500).send({
+        messages: `update bannerId=${req.params.id} error`,
+      });
+    }
+
   }
 
-  public delete(req: Request, res: Response) {
-    const banner_id: string = req.params.id;
-    const options: DestroyOptions = {
-      where: {
-        id: banner_id,
-      },
-      limit: 1,
-    };
+  public delete = async (req: Request, res: Response) => {
+    try {
+      const banner_id: string = req.params.id;
+      const options: DestroyOptions = {
+        where: {
+          id: banner_id,
+        },
+        limit: 1,
+      };
 
-    Banner.destroy(options)
-      .then(() => res.status(204).json({
-        message: "success",
-      }))
-      .catch((err: Error) => res.status(500).json(err));
+      await Banner.destroy(options);
+      res.status(204).json({
+        message: `delete bannerID=${banner_id} success`,
+      });
+    } catch (err) {
+      res.status(500).send({
+        "messages": `delete bannerID=${req.params.id} error`,
+      });
+    }
+
   }
 }

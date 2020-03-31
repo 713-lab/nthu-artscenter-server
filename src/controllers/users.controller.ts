@@ -100,8 +100,6 @@ export class UsersController {
   public async isAuth(req: Request, res: Response, next: any) {
     try {
       if(req.session.isLogin){
-        // tslint:disable-next-line:no-console
-        // console.log(req.session);
         next();
       }
       else{

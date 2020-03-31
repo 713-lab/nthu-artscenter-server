@@ -10,7 +10,8 @@ const testExhibition1 = {
   description: "test exhibition 1 description",
   type: "visual_arts",
   start_date: "2019-02-27",
-  performer: "artscenter"
+  performer: "artscenter",
+  cover_id: 1
 }
 
 const testExhibition2 = {
@@ -19,7 +20,8 @@ const testExhibition2 = {
   description: "test exhibition 2 description",
   type: "film",
   start_date: "2019-02-27",
-  performer: "ChiaHsin"
+  performer: "ChiaHsin",
+  cover_id: 2
 }
 
 const testExhibition3 = {
@@ -28,7 +30,8 @@ const testExhibition3 = {
   description: "test exhibition 3 description",
   type: "visual_arts",
   start_date: "2018-02-27",
-  performer: "ChiaHsin"
+  performer: "ChiaHsin",
+  cover_id: 3
 }
 
 // Information

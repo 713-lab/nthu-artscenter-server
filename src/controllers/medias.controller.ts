@@ -13,13 +13,10 @@ export class MediasController {
       const medias: Media[] = await Media.findAll < Media > ({
         limit: _req.query.limit || 12,
         offset: _req.query.offset || 0,
-        order: ['id'],
+        order: [
+          ['id', 'DESC'],
+        ],
       });
-      for(const media of medias) {
-        media.setDataValue('src', UPLOAD_DIR + '/' + media.semester + '/' + media.file);
-        media.setDataValue('src_cover', UPLOAD_DIR + '/' + media.semester + '/cover_' + media.file);
-        media.setDataValue('src_thumb', UPLOAD_DIR + '/' + media.semester + '/thumb_' + media.file);
-      }
       res.send(medias);
     } catch(err) {
       res.status(500).send({message: err});
@@ -42,9 +39,11 @@ export class MediasController {
     Media.findByPk < Media > (media_id)
       .then((media: Media | null) => {
         if (media) {
+          /*
           media.setDataValue('src', UPLOAD_DIR + '/' + media.semester + '/' + media.file);
           media.setDataValue('src_cover', UPLOAD_DIR + '/' + media.semester + '/cover_' + media.file);
           media.setDataValue('src_thumb', UPLOAD_DIR + '/' + media.semester + '/thumb_' + media.file);
+          */
           res.json(media);
         } else {
           res.status(404).json({

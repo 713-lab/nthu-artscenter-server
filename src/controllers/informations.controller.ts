@@ -5,40 +5,55 @@ import { Media } from '../models/Media';
 
 
 export class InformationsController {
-  public async index(req: Request, res: Response) {
+  public index = async (req: Request, res: Response) => {
     try {
       const informations = await Information.findAll < Information > ({
         limit: req.query.limit || 12,
         offset: req.query.offset || 0,
-        order: ['id'],
+        order: [
+          ['start_date', 'DESC'],
+        ],
       });
+
       for(const information of informations) {
-        const medias = await Media.findAll({
-          where: {
-            information_id: information.id,
-          },
-        });
-        information.setDataValue('media', medias);
+        if(information.cover_id){
+          const cover = await Media.findByPk(information.cover_id);
+          if(cover){ information.setDataValue('cover', cover);}
+        }
+
       }
-      res.json(informations);
+      res.status(200).json(informations);
     }catch(err) {
-      res.status(500).json(err);
+      // tslint:disable-next-line:no-console
+      console.log(err);
+      res.status(500).json({
+        message: "index informations error",
+      });
     }
   }
 
-  public create(req: Request, res: Response) {
-    const params: InformationInterface = req.body;
-
-    Information.create < Information > (params)
-      .then((information: Information) => res.status(201).json(information))
-      .catch((err: Error) => res.status(500).json(err));
+  public create = async (req: Request, res: Response) => {
+    try{
+      const params: InformationInterface = req.body;
+      const information = await Information.create < Information > (params);
+      if(information.cover_id){
+        const cover = await Media.findByPk(information.cover_id);
+        if(cover){ information.setDataValue('cover', cover);}
+      }
+      res.status(201).json(information);
+    }catch(err) {
+      res.status(500).json({
+        message: "create information error",
+      });
+    }
   }
 
-  public async show(req: Request, res: Response) {
+  public show = async (req: Request, res: Response) => {
     try {
       const information_id: string = req.params.id;
       const information: Information | null = await Information.findByPk < Information > (information_id);
       // tslint:disable-next-line:no-console
+      if(!information){ throw Error(`informationId=${req.params.id} not found`);}
       if (information) {
         if(information.cover_id){
           const cover = await Media.findByPk(information.cover_id);
@@ -46,23 +61,16 @@ export class InformationsController {
           console.log(cover);
           information.setDataValue('cover', cover);
         }
-        const medias = await Media.findAll({
-          where: {
-            information_id: information.id,
-          },
-        });
-        information.setDataValue('media', medias);
         return res.json(information);
       }
-      else { res.status(404); }
-
-
     } catch(err) {
-      return res.status(500).json(err);
+      return res.status(500).json({
+        message: err.message,
+      });
     }
   }
 
-  public async update(req: Request, res: Response) {
+  public update = async (req: Request, res: Response) => {
     try {
       const information_id: string = req.params.id;
       const params: InformationInterface = req.body;
@@ -76,30 +84,36 @@ export class InformationsController {
 
       await Information.update(params, options);
       res.status(202).send({
-        message: "OK",
+        message: `update informationId=${req.params.id} success`,
       });
       }catch(err) {
         res.status(500).send({
-          error: err,
+          message: `update informationId=${req.params.id} error`,
         });
       }
 
   }
 
-  public delete(req: Request, res: Response) {
-    const information_id: string = req.params.id;
-    const options: DestroyOptions = {
-      where: {
-        id: information_id,
-      },
-      limit: 1,
-    };
+  public delete = async (req: Request, res: Response) => {
+    try {
+      const information_id: string = req.params.id;
+      const options: DestroyOptions = {
+        where: {
+          id: information_id,
+        },
+        limit: 1,
+      };
 
-    Information.destroy(options)
-      .then(() => res.status(204).json({
-        message: "success",
-      }))
-      .catch((err: Error) => res.status(500).json(err));
+      await Information.destroy(options);
+      res.status(204).json({
+        message: `delete informationId=${req.params.id} success`,
+      });
+    } catch(err) {
+      res.status(500).json({
+        message: `delete informationId=${req.params.id} error`,
+      });
+    }
+
   }
 
 
