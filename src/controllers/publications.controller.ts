@@ -28,8 +28,6 @@ export class PublicationsController {
       if (publication) {
         if(publication.cover_id){
           const cover = await Media.findByPk(publication.cover_id);
-          // tslint:disable-next-line:no-console
-          console.log(cover);
           publication.setDataValue('cover', cover);
         }
         return res.json(publication);
