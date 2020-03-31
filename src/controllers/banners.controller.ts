@@ -75,12 +75,12 @@ export class BannersController {
       if(!banner) { throw Error(`BannerId=${banner_id} not found`);}
 
       if(banner.cover_id){
-        const cover = await Media.findByPk(banner.cover_id);
-        banner.setDataValue('cover', cover);
+        const cover: Media | null = await Media.findByPk(banner.cover_id);
+        if(cover){ banner.setDataValue('cover', cover);}
       }
       if(banner.cover_mobile_id){
-        const coverMobile = await Media.findByPk(banner.cover_mobile_id);
-        banner.setDataValue('cover_mobile', coverMobile);
+        const coverMobile: Media | null = await Media.findByPk(banner.cover_mobile_id);
+        if(coverMobile){ banner.setDataValue('cover_mobile', coverMobile);}
       }
       if(banner.exhibition_id){
         const exhibition: Exhibition | null = await Exhibition.findByPk(banner.exhibition_id);
@@ -130,11 +130,11 @@ export class BannersController {
 
       await Banner.destroy(options);
       res.status(204).json({
-        message: `delete bannerID=${banner_id}`,
+        message: `delete bannerID=${banner_id} success`,
       });
     }catch(err) {
       res.status(500).send({
-        "messages": `delete bannerID=${req.params.id}`,
+        "messages": `delete bannerID=${req.params.id} error`,
       });
     }
 

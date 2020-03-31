@@ -39,11 +39,18 @@ Banner.init({
     autoIncrement: true,
     primaryKey: true,
   },
-  title: DataTypes.STRING,
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   subtitle: DataTypes.STRING,
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  cover_id: {
+    allowNull: false,
+    type: DataTypes.INTEGER
   }
   
 }, {
