@@ -34,6 +34,8 @@ describe("GET /api/v2/exhibitions/:id", () => {
         expect(res.body.description).toBe(testExhibition1.description);
         expect(res.body.start_date).toBe(testExhibition1.start_date);
         expect(res.body.type).toBe(testExhibition1.type);
+        expect(res.body.cover_id).toBe(testExhibition1.cover_id);
+        expect(res.body.cover.src).toBeDefined();
     })
 })
 
