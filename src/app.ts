@@ -40,11 +40,11 @@ app.use(session({
   cookie: { secure: process.env.isHTTPS === 'true' || false, maxAge: 600 * 1000 },
 }));
 
-if(process.env.NODE_ENV == 'dev'){
+if(process.env.NODE_ENV === 'dev'){
   morganBody(app);
   
 }
-else if(process.env.NODE_ENV == 'prod'){
+else if(process.env.NODE_ENV === 'prod'){
   app.use(morgan('combined'));
 }
 
