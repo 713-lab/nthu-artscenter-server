@@ -1,9 +1,7 @@
 import sharp from 'sharp';
 import * as path from 'path';
 import * as fs from 'fs';
-
-const UPLOAD_TMP_DIR = path.join(__dirname, '../../public/static/uploads/tmp');
-const UPLOAD_DIR = path.join(__dirname, '../../public/static/uploads');
+import { UPLOAD_DIR, UPLOAD_TMP_DIR } from "../config/constant";
 
 export const storeTwoSizePic = async (destination, filename) => {
   try {

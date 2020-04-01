@@ -1,7 +1,4 @@
-import {
-  Request,
-  Response,
-} from 'express';
+import { Request, Response } from 'express';
 import {
   Banner,
   BannerInterface,
@@ -10,17 +7,12 @@ import {
   UpdateOptions,
   DestroyOptions,
 } from 'sequelize';
-import {
-  Media,
-} from '../models/Media';
-import {
-  Exhibition,
-} from '../models/Exhibition';
 
+import { BannerService } from '../services/banner.service';
 
+const bannerService = new BannerService();
 
 export class BannersController {
-
   /**
    * Return Banner list
    *
@@ -29,36 +21,13 @@ export class BannersController {
    */
   public index = async (_req: Request, res: Response) => {
     try {
-      const banners: Banner[] | null = await Banner.findAll < Banner > ({});
-      if (!banners) {
-        res.status(201).json();
-      }
-      for (const banner of banners) {
-        if (banner.cover_id) {
-          const cover: Media | null = await Media.findByPk(banner.cover_id);
-          if (cover) {
-            banner.setDataValue('cover', cover);
-          }
-        }
-        if (banner.cover_mobile_id) {
-          const coverMobile: Media | null = await Media.findByPk(banner.cover_mobile_id);
-          if (coverMobile) {
-            banner.setDataValue('cover_mobile', coverMobile);
-          }
-        }
-        if (banner.exhibition_id) {
-          const exhibition: Exhibition | null = await Exhibition.findByPk(banner.exhibition_id);
-          if (exhibition) {
-            banner.setDataValue('exhibition', exhibition);
-          }
-        }
-      }
+      const banners: Banner[]= await bannerService.findAllWithSrc({});
       res.status(201).json(banners);
     } catch (err) {
       // tslint:disable-next-line:no-console
       console.log(err);
       res.status(500).send({
-        messages: "index banners error",
+        message: "index banners error",
       });
     }
   }
@@ -66,26 +35,8 @@ export class BannersController {
   public create = async (req: Request, res: Response): Promise < Banner | void > => {
     try {
       const params: BannerInterface = req.body;
-      const banner: Banner | null = await Banner.create < Banner > (params);
-
-      if (banner.cover_id) {
-        const cover: Media | null = await Media.findByPk(banner.cover_id);
-        if (cover) {
-          banner.setDataValue('cover', cover);
-        }
-      }
-      if (banner.cover_mobile_id) {
-        const coverMobile: Media | null = await Media.findByPk(banner.cover_mobile_id);
-        if (coverMobile) {
-          banner.setDataValue('cover_mobile', coverMobile);
-        }
-      }
-      if (banner.exhibition_id) {
-        const exhibition: Exhibition | null = await Exhibition.findByPk(banner.exhibition_id);
-        if (exhibition) {
-          banner.setDataValue('exhibition', exhibition);
-        }
-      }
+      let banner: Banner | null = await Banner.create < Banner > (params);
+      banner = await bannerService.findByPkWithSrc(banner.id);
       res.status(201).json(banner);
     } catch (err) {
       res.status(500).send({
@@ -97,34 +48,15 @@ export class BannersController {
   public show = async (req: Request, res: Response) => {
     try {
       const banner_id: string = req.params.id;
-      const banner: Banner | null = await Banner.findByPk < Banner > (banner_id);
+      const banner: Banner | null = await bannerService.findByPkWithSrc(banner_id);
 
       if (!banner) {
         throw Error(`BannerId=${banner_id} not found`);
       }
-
-      if (banner.cover_id) {
-        const cover: Media | null = await Media.findByPk(banner.cover_id);
-        if (cover) {
-          banner.setDataValue('cover', cover);
-        }
-      }
-      if (banner.cover_mobile_id) {
-        const coverMobile: Media | null = await Media.findByPk(banner.cover_mobile_id);
-        if (coverMobile) {
-          banner.setDataValue('cover_mobile', coverMobile);
-        }
-      }
-      if (banner.exhibition_id) {
-        const exhibition: Exhibition | null = await Exhibition.findByPk(banner.exhibition_id);
-        if (exhibition) {
-          banner.setDataValue('exhibition', exhibition);
-        }
-      }
       res.status(201).json(banner);
     } catch (err) {
       res.status(500).send({
-        messages: err.message,
+        message: err.message,
       });
     }
   }
@@ -143,11 +75,11 @@ export class BannersController {
 
       await Banner.update(params, options);
       res.status(201).send({
-        messages: `update bannerId=${banner_id} success`,
+        message: `update bannerId=${banner_id} success`,
       });
     } catch (err) {
       res.status(500).send({
-        messages: `update bannerId=${req.params.id} error`,
+        message: `update bannerId=${req.params.id} error`,
       });
     }
 
@@ -169,7 +101,7 @@ export class BannersController {
       });
     } catch (err) {
       res.status(500).send({
-        "messages": `delete bannerID=${req.params.id} error`,
+        "message": `delete bannerID=${req.params.id} error`,
       });
     }
 

@@ -10,10 +10,9 @@ import {
   UpdateOptions,
   DestroyOptions,
 } from 'sequelize';
-import {
-  Media,
-} from '../models/Media';
+import { ExhibitionService } from '../services/exhibition.service';
 
+const exhibitionService = new ExhibitionService();
 export class ExhibitionsController {
 
   public index = async (req: Request, res: Response) => {
@@ -23,7 +22,7 @@ export class ExhibitionsController {
       const searchStr = req.query.searchStr;
       let exhibitions: Exhibition[];
       if (!typeOfArt && !year && !searchStr) {
-        exhibitions = await Exhibition.findAll < Exhibition > ({
+        exhibitions = await exhibitionService.findAllWithSrc({
           limit: req.query.limit || 12,
           offset: req.query.offset || 0,
           order: [
@@ -31,7 +30,7 @@ export class ExhibitionsController {
           ],
         });
       } else {
-        exhibitions = await Exhibition.findAll < Exhibition > ({});
+        exhibitions = await exhibitionService.findAllWithSrc({});
         if (typeOfArt) {
           exhibitions = exhibitions.filter((item) => {
             return item.type === typeOfArt;
@@ -55,19 +54,6 @@ export class ExhibitionsController {
           });
         }
       }
-
-      for (const exhibition of exhibitions) {
-        if(exhibition.cover_id){
-          const cover: Media | null = await Media.findByPk(exhibition.cover_id);
-          if(cover) { exhibition.setDataValue('cover', cover);}
-        }
-        const medias = await Media.findAll({
-          where: {
-            exhibition_id: exhibition.id,
-          },
-        });
-        exhibition.setDataValue('media', medias);
-      }
       res.json(exhibitions);
     } catch (err) {
       res.status(500).json(err);
@@ -77,7 +63,8 @@ export class ExhibitionsController {
   public create = async (req: Request, res: Response) => {
     try {
       const params: ExhibitionInterface = req.body;
-      const exhibition = await Exhibition.create < Exhibition > (params);
+      let exhibition = await Exhibition.create < Exhibition > (params);
+      exhibition = await exhibitionService.findByPkWithSrc(exhibition.id);
       res.status(201).json(exhibition);
     } catch (err) {
       // tslint:disable-next-line:no-console
@@ -89,20 +76,8 @@ export class ExhibitionsController {
   public show = async (req: Request, res: Response) => {
     try {
       const exhibition_id: string = req.params.id;
-      const exhibition: Exhibition | null = await Exhibition.findByPk < Exhibition > (exhibition_id);
+      const exhibition: Exhibition | null = await exhibitionService.findByPkWithSrc(exhibition_id);
       if(!exhibition){ throw Error(`not found exhibitionId=${req.params.id}`);}
-      if (exhibition) {
-        if (exhibition.cover_id) {
-          const cover: Media | null = await Media.findByPk(exhibition.cover_id);
-          if(cover) { exhibition.setDataValue('cover', cover);}
-        }
-        const medias = await Media.findAll({
-          where: {
-            exhibition_id: exhibition.id,
-          },
-        });
-        exhibition.setDataValue('media', medias);
-      }
       res.status(200).json(exhibition);
     } catch (err) {
       return res.status(500).json({
@@ -149,7 +124,7 @@ export class ExhibitionsController {
       res.status(204).json({});
     }catch(err) {
       res.status(500).json({
-        messages: `delete exhibitionId=${req.params.id} error`,
+        message: `delete exhibitionId=${req.params.id} error`,
       });
     }
   }
