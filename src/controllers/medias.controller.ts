@@ -1,91 +1,97 @@
 import { Request, Response } from 'express';
 import { Media, MediaInterface } from '../models/Media';
 import { UpdateOptions, DestroyOptions } from 'sequelize';
-import * as path from 'path';
-import { UPLOAD_DIR } from '../config/config';
 import { storeTwoSizePic, moveTmpFilesToRightFolder, generateIndexFolder } from '../utils/sharp';
+import { MediaService } from "../services/media.service";
 
-
+const mediaService = new MediaService();
 export class MediasController {
 
-  public async index(_req: Request, res: Response) {
+  public index = async (req: Request, res: Response) => {
     try {
-      const medias: Media[] = await Media.findAll < Media > ({
-        limit: _req.query.limit || 12,
-        offset: _req.query.offset || 0,
+      const medias: Media[] = await mediaService.findAllWithSrc({
+        limit: req.query.limit || 12,
+        offset: req.query.offset || 0,
         order: [
           ['id', 'DESC'],
         ],
       });
       res.send(medias);
     } catch(err) {
-      res.status(500).send({message: err});
+      res.status(500).send({message: "index images error"});
     }
   }
 
-  public create(req: Request, res: Response) {
-    const request = req.body;
-    request.file = req.file.filename;
-    const params: MediaInterface = request;
+  public create = async (req: Request, res: Response) => {
+    try {
+      const request = req.body;
+      request.file = req.file.filename;
+      const params: MediaInterface = request;
 
-    Media.create < Media > (params)
-      .then((media: Media) => res.status(201).json(media))
-      .catch((err: Error) => res.status(500).json(err));
+      let media = await Media.create < Media > (params);
+      media = await mediaService.findByPkWithSrc(media.id);
+      res.status(201).json(media);
+    }catch(err) {
+      // tslint:disable-next-line:no-console
+      console.log(err);
+      res.status(500).json({ message: "create media error"});
+    }
   }
 
-  public show(req: Request, res: Response) {
-    const media_id: string = req.params.id;
+  public show = async (req: Request, res: Response) => {
+    try {
+      const media_id: string = req.params.id;
 
-    Media.findByPk < Media > (media_id)
-      .then((media: Media | null) => {
-        if (media) {
-          /*
-          media.setDataValue('src', UPLOAD_DIR + '/' + media.semester + '/' + media.file);
-          media.setDataValue('src_cover', UPLOAD_DIR + '/' + media.semester + '/cover_' + media.file);
-          media.setDataValue('src_thumb', UPLOAD_DIR + '/' + media.semester + '/thumb_' + media.file);
-          */
-          res.json(media);
-        } else {
-          res.status(404).json({
-            errors: ['Media not found'],
-          });
-        }
-      })
-      .catch((err: Error) => res.status(500).json(err));
+      const media: Media | null = await mediaService.findByPkWithSrc(media_id);
+      if(media) {
+        res.status(200).json(media);
+      }
+      else {
+        res.status(404).json({ message: `mediaId=${req.params.id} not found`});
+      }
+    } catch(err) {
+      res.status(500).json({ message: "show media error"});
+    }
   }
 
-  public update(req: Request, res: Response) {
-    const media_id: string = req.params.id;
-    const params: MediaInterface = req.body;
+  public update = async (req: Request, res: Response) => {
+    try {
+      const media_id: string = req.params.id;
+      const params: MediaInterface = req.body;
 
-    const options: UpdateOptions = {
-      where: {
-        id: media_id,
-      },
-      limit: 1,
-    };
+      const options: UpdateOptions = {
+        where: {
+          id: media_id,
+        },
+        limit: 1,
+      };
 
-    Media.update(params, options)
-      .then(() => res.status(202).json({
-        data: "success",
-      }))
-      .catch((err: Error) => res.status(500).json(err));
+      await Media.update(params, options);
+      res.status(202).json({
+        message: "success",
+      });
+    } catch(err) {
+      res.status(500).json("update media error");
+    }
   }
 
-  public delete(req: Request, res: Response) {
-    const media_id: string = req.params.id;
-    const options: DestroyOptions = {
-      where: {
-        id: media_id,
-      },
-      limit: 1,
-    };
+  public delete = async (req: Request, res: Response) => {
+    try {
+      const media_id: string = req.params.id;
+      const options: DestroyOptions = {
+        where: {
+          id: media_id,
+        },
+        limit: 1,
+      };
 
-    Media.destroy(options)
-      .then(() => res.status(204).json({
-        data: "success",
-      }))
-      .catch((err: Error) => res.status(500).json(err));
+      await Media.destroy(options);
+      res.status(204).json({
+        message: "success",
+      });
+    } catch(err) {
+      res.status(500).json("delete media error");
+    }
   }
 
   public async preprocess(req: Request, res: Response, next: any) {

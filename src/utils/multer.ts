@@ -5,7 +5,7 @@ import {
   stat,
 } from 'fs';
 
-const UPLOAD_DIR = path.join(__dirname, '../../public/static/uploads/tmp');
+import { UPLOAD_DIR } from "../config/constant";
 
 const storage = multer.diskStorage({
   destination(_req, _file, cb) {

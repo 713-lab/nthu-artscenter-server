@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { request } from 'express';
 import bodyParser from 'body-parser';
 import dotenv from "dotenv";
 import routeV2 from './routes/route.v2';
@@ -40,8 +40,13 @@ app.use(session({
   cookie: { secure: process.env.isHTTPS === 'true' || false, maxAge: 600 * 1000 },
 }));
 
-// app.use(morgan('combined'));
-morganBody(app);
+if(process.env.NODE_ENV === 'dev'){
+  morganBody(app);
+  
+}
+else if(process.env.NODE_ENV === 'prod'){
+  app.use(morgan('combined'));
+}
 
 app.use(express.static(path.join(__dirname, "../public")));
 

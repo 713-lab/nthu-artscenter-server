@@ -124,7 +124,9 @@ docker-compose up
 | **node_modules**     | Contains all your npm dependencies                           |
 | **src**              | Source code which will be compiled then stored in dist/      |
 | **src/config**       | Database setting                                             |
+| **src/config**/constant.ts | Some constants used in global                          |
 | **src/controllers**  | Functions handles various http requests                      |
+| **src/services**     | Recapsulte some sequelize query function to return media url |
 | **src/models**       | Models defined by Sequelize                                  |
 | **src**/server.ts    | Entry point to your express app                              |
 | **src**/app.ts       | ExpressJs Instance                                           |

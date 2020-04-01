@@ -2,26 +2,27 @@ import { Request, Response } from 'express';
 import { Publication, PublicationInterface } from '../models/Publication';
 import { UpdateOptions, DestroyOptions } from 'sequelize';
 import { Media } from '../models/Media';
+import { PublicationService } from "../services/publication.service";
 
+const publicationService = new PublicationService();
 
 export class PublicationsController {
 
-  public index = async (_req: Request, res: Response) => {
+  public index = async (req: Request, res: Response) => {
     try {
-      const publications: Publication[] = await Publication.findAll < Publication > ({});
-      // tslint:disable-next-line:no-console
-      for(const publication of publications) {
-        if(publication.cover_id){
-          const cover = await Media.findByPk(publication.cover_id);
-          publication.setDataValue('cover', cover);
-        }
-      }
+      const publications: Publication[] = await publicationService.findAllWithSrc({
+        limit: req.query.limit || 12,
+        offset: req.query.offset || 0,
+        order: [
+          ['publish_date', 'DESC'],
+        ],
+      });
       res.status(200).json(publications);
     }catch(err) {
       // tslint:disable-next-line:no-console
       console.log(err);
       res.status(500).send({
-        "messages": "index publications error",
+        "message": "index publications error",
       });
     }
   }
@@ -29,15 +30,14 @@ export class PublicationsController {
   public create = async (req: Request, res: Response) => {
     try {
       const params: PublicationInterface = req.body;
-      const publication = await Publication.create < Publication > (params);
-      const cover = await Media.findByPk(publication.cover_id);
-      publication.setDataValue('cover', cover);
+      let publication = await Publication.create < Publication > (params);
+      publication = await publicationService.findByPkWithSrc(publication.id);
       res.status(201).json(publication);
     }catch(err) {
       // tslint:disable-next-line:no-console
       console.log(err);
       res.status(500).send({
-        "messages": "create publication error",
+        "message": "create publication error",
       });
     }
   }
@@ -45,20 +45,14 @@ export class PublicationsController {
   public show = async (req: Request, res: Response) => {
     try {
       const publication_id: string = req.params.id;
-      const publication: Publication | null = await Publication.findByPk < Publication > (publication_id);
+      const publication: Publication | null = await publicationService.findByPkWithSrc(publication_id);
       if(!publication){ throw Error(`show publicationId=${req.params.id} error`);}
-      if (publication) {
-        if(publication.cover_id){
-          const cover = await Media.findByPk(publication.cover_id);
-          publication.setDataValue('cover', cover);
-        }
-      }
       res.status(200).json(publication);
     } catch(err) {
       // tslint:disable-next-line:no-console
       console.log(err);
       res.status(500).send({
-        "messages": err.message,
+        "message": err.message,
       });
     }
   }
@@ -80,7 +74,7 @@ export class PublicationsController {
       });
     }catch(err) {
       res.status(500).json({
-        messages: `update publicationId=${req.params.id} error`,
+        message: `update publicationId=${req.params.id} error`,
       });
     }
   }
@@ -101,7 +95,7 @@ export class PublicationsController {
       });
     }catch(err) {
       res.status(500).json({
-        messages: `delete publicationId=${req.params.id} error`,
+        message: `delete publicationId=${req.params.id} error`,
       });
     }
   }

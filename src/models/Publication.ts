@@ -22,6 +22,7 @@ class Publication extends Model {
   public en_spec!: string;
 
   public cover!: any;
+  public media!: any;
   public isActive!: boolean;
 
 }
@@ -46,6 +47,7 @@ interface PublicationInterface {
     en_spec: string;
   
     cover: any;
+    media: any;
     isActive: boolean;
 }
 
