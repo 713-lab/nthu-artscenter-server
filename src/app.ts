@@ -42,7 +42,7 @@ app.use(session({
 
 if(process.env.NODE_ENV === 'dev'){
   morganBody(app);
-  
+
 }
 else if(process.env.NODE_ENV === 'prod'){
   app.use(morgan('combined'));
