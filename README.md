@@ -138,7 +138,7 @@ docker-compose up
 | jest.config.js       | Used to configure Jest running tests written in TypeScript   |
 | package.json         |                                                              | 
 | tsconfig.json        | Config settings for compiling server code written in TypeScript |
-| tslint.json          |                                    |
+| tslint.json          | TypeScript Linter                                   |
 
 # References
 
